@@ -22,14 +22,21 @@ root_group = value_for_platform(
   "default" => "root"
 )
 
-package "unbound" do
-  action :upgrade
+# The Ubuntu package activates the service immediately upon installing. If the
+# Chef server is in a private zone (e.g., chef.mycorp), this renders the Chef
+# server unreachable and breaks the rest of the Chef run. So defer installation
+# until configuration files are in place if running on Ubuntu.
+unless node[:platform] == 'ubuntu'
+  package "unbound" do
+    action :upgrade
+  end
 end
 
 directory "#{node['unbound']['directory']}/conf.d" do
   mode 0755
   owner "root"
   group root_group
+  recursive true
 end
 
 template "#{node['unbound']['directory']}/unbound.conf" do
@@ -64,6 +71,15 @@ end
 
 # Not yet supported.
 # include_recipe "unbound::remote_control" if node['unbound']['remote_control']['enable']
+
+# Delayed package install for Ubuntu. Have to tell 'apt-get install' to accept
+# the configuration files installed above or the Chef run break.
+if node[:platform] == "ubuntu"
+  package "unbound" do
+    action :upgrade
+    options '-o DPkg::Options::="--force-confold"'
+  end
+end
 
 service "unbound" do
   supports value_for_platform(
