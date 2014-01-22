@@ -420,6 +420,6 @@ python:
   # Script file to load
   # python-script: "/etc/unbound/ubmodule-tst.py"
 
-include: "<%= node['unbound']['directory'] %>/conf.d/local-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/stub-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/forward-zone.conf"
+<% @types.each do |type| -%>
+include: "<%= node['unbound']['directory'] %>/conf.d/<%= type %>-zone.conf"
+<% end -%>

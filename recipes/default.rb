@@ -37,16 +37,19 @@ template "#{node['unbound']['directory']}/unbound.conf" do
   mode 0644
   owner "root"
   group root_group
+  variables(:types => node['unbound']['zone_types'])
   notifies :restart, "service[unbound]"
 end
 
-begin
-  local_zone = data_bag_item("dns", node['dns']['domain'].gsub(/\./, "_"))
-rescue
-  local_zone = node['dns']['domain']
+if node['unbound']['zone_types'].include?('local')
+  begin
+    local_zone = data_bag_item("dns", node['dns']['domain'].gsub(/\./, "_"))
+  rescue
+    local_zone = node['dns']['domain']
+  end
 end
 
-%w{ local forward stub }.each do |type|
+node['unbound']['zone_types'].each do |type|
 
   template "#{node['unbound']['directory']}/conf.d/#{type}-zone.conf" do
     source "#{type}-zone.conf.erb"
