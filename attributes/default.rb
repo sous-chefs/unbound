@@ -19,6 +19,14 @@ default['unbound']['stats']['cumulative'] = "no"
 default['unbound']['stats']['extended'] = "no"
 default['unbound']['zone_types'] = ['forward']
 
+# /etc/default/unbound settings for Ubuntu (possibly also Debian)
+default['unbound']['unbound_enable'] = true
+default['unbound']['root_trust_anchor_update'] = true
+default['unbound']['root_trust_anchor_file'] = '/var/lib/unbound/root.key'
+default['unbound']['resolvconf'] = true
+default['unbound']['resolvconf_forwarders'] = false
+default['unbound']['daemon_opts'] = '-c /etc/unbound/unbound.conf'
+
 #default['unbound']['dnssec'] - disabled by default, future todo
 
 case node['platform']

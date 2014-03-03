@@ -75,10 +75,27 @@ end
 # Delayed package install for Ubuntu. Have to tell 'apt-get install' to accept
 # the configuration files installed above or the Chef run break.
 if node[:platform] == "ubuntu"
+
+  template "/etc/default/unbound" do
+    source "default_unbound.erb"
+    owner 'root'
+    group 'root'
+    mode '0644'
+    variables({
+      :unbound_enable => node['unbound']['unbound_enable'],
+      :root_trust_anchor_update => node['unbound']['root_trust_anchor_update'],
+      :root_trust_anchor_file => node['unbound']['root_trust_anchor_file'],
+      :resolvconf => node['unbound']['resolvconf'],
+      :resolvconf_forwarders => node['unbound']['resolvconf_forwarders'],
+      :daemon_opts => node['unbound']['daemon_opts']
+    })
+  end
+
   package "unbound" do
     action :upgrade
     options '-o DPkg::Options::="--force-confold"'
   end
+
 end
 
 service "unbound" do
