@@ -1,4 +1,4 @@
-default['unbound']['interface'] = [ node['ipaddress'] ]
+default['unbound']['interface'] = []
 default['unbound']['outgoing_interface'] = nil
 default['unbound']['port'] = 53
 default['unbound']['num_threads'] = 1
