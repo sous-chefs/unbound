@@ -423,3 +423,7 @@ python:
 <% @types.each do |type| -%>
 include: "<%= node['unbound']['directory'] %>/conf.d/<%= type %>-zone.conf"
 <% end -%>
+
+<% if node['unbound']['remote_control']['enable'] %>
+include: "<%= node['unbound']['directory'] %>/conf.d/remote-control.conf"
+<% end %>

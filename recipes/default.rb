@@ -69,9 +69,6 @@ node['unbound']['zone_types'].each do |type|
 
 end
 
-# Not yet supported.
-# include_recipe "unbound::remote_control" if node['unbound']['remote_control']['enable']
-
 # Delayed package install for Ubuntu. Have to tell 'apt-get install' to accept
 # the configuration files installed above or the Chef run break.
 if node[:platform] == "ubuntu"
@@ -96,6 +93,10 @@ if node[:platform] == "ubuntu"
     options '-o DPkg::Options::="--force-confold"'
   end
 
+end
+
+if node['unbound']['remote_control']['enable']
+  include_recipe "unbound::remote_control"
 end
 
 service "unbound" do
