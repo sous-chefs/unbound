@@ -7,10 +7,10 @@ remote-control:
 
 	# what interfaces are listened to for remote control.
 	# give 0.0.0.0 and ::0 to listen to all interfaces.
-  control-interface: <%= node['unbound']['remote_control'] %>
+  control-interface: <%= node['unbound']['remote_control']['interface'] %>
 
 	# port number for remote control operations.
-	# control-port: 953
+        control-port: <%= node['unbound']['remote_control']['port'] %>
 
 	# unbound server key file.
 	# server-key-file: "/etc/unbound/unbound_server.key"

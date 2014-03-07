@@ -12,4 +12,8 @@
 # forward-zone:
 #   name: "example.org"
 #   forward-host: fwd.example.com
-
+<% node['unbound']['forward'].each do |zone| =%>
+forward-zone:
+  name: "<%= zone['name'] %>"
+  forward-addr: <%= zone['forward-addr'] %>
+<% end -%>

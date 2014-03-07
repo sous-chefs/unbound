@@ -180,7 +180,7 @@ server:
   # access-control: ::0/0 refuse
   # access-control: ::1 allow
   # access-control: ::ffff:127.0.0.1 allow
-  <% node['unbound']['access_control'].each do |netblock,action| -%>
+  <% node['unbound']['access_control'].sort.each do |netblock,action| -%>
   access-control: <%= netblock %> <%= action %>
   <% end -%>
 
@@ -420,6 +420,10 @@ python:
   # Script file to load
   # python-script: "/etc/unbound/ubmodule-tst.py"
 
-include: "<%= node['unbound']['directory'] %>/conf.d/local-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/stub-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/forward-zone.conf"
+<% @types.each do |type| -%>
+include: "<%= node['unbound']['directory'] %>/conf.d/<%= type %>-zone.conf"
+<% end -%>
+
+<% if node['unbound']['remote_control']['enable'] %>
+include: "<%= node['unbound']['directory'] %>/conf.d/remote-control.conf"
+<% end %>
