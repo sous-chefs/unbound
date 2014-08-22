@@ -412,6 +412,11 @@ server:
   # plain value in bytes or you can append k, m or G. default is "1Mb". 
   # neg-cache-size: 1m
 
+# local-zone must be included in the server clause above
+include: "<%= node['unbound']['directory'] %>/conf.d/local-zone.conf"
+include: "<%= node['unbound']['directory'] %>/conf.d/stub-zone.conf"
+include: "<%= node['unbound']['directory'] %>/conf.d/forward-zone.conf"
+
 # Python config section. To enable:
 # o use --with-pythonmodule to configure before compiling.
 # o list python in the module-config string (above) to enable.
@@ -420,6 +425,3 @@ python:
   # Script file to load
   # python-script: "/etc/unbound/ubmodule-tst.py"
 
-include: "<%= node['unbound']['directory'] %>/conf.d/local-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/stub-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/forward-zone.conf"
