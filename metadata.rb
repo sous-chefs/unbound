@@ -1,13 +1,14 @@
-maintainer       "Joshua Timberman"
-maintainer_email "cookbooks@housepub.org"
-license          "Apache 2.0"
-description      "Manages unbound DNS resolver"
+name             'unbound'
+maintainer       'Drew Blessing'
+maintainer_email 'drew@blessing.io'
+license          'Apache 2.0'
+description      'Manages unbound DNS resolver'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.1.0"
+version          '0.1.0'
 
-recipe "unbound::default", "Installs unbound and sets up configuration files"
-recipe "unbound::chroot", "Sets up the chroot environment if chroot attribute is enabled"
-recipe "unbound::remote_control", "Sets up remote control certificates"
+recipe 'unbound::default', 'Installs unbound and sets up configuration files'
+recipe 'unbound::chroot', 'Sets up the chroot environment if chroot attribute is enabled'
+recipe 'unbound::remote_control', 'Sets up remote control certificates'
 
 attribute 'unbound/directory',
   :display_name => 'Unbound directory',
@@ -27,13 +28,13 @@ attribute 'unbound/bindir',
 attribute 'unbound/interface',
   :display_name => 'Listen interfaces',
   :description => 'Array of IP address interfaces to listen on, default is the nodes ipaddress',
-  :type => "array",
+  :type => 'array',
   :calculated => true
 
 attribute 'unbound/outgoing_interface',
   :display_name => 'Outgoing interfaces',
   :description => 'Array of IP address interfaces to send outgoing queries to',
-  :type => "array",
+  :type => 'array',
   :default => []
 
 attribute 'unbound/port',
@@ -64,12 +65,12 @@ attribute 'unbound/enable_udp',
 attribute 'unbound/access_control',
   :display_name => 'Client access controls',
   :description => 'Client access controls, key is the netblock size and value is the action',
-  :type => "hash",
-  :default => { "127.0.0.1/8" => "allow", "0.0.0.0/0" => "refuse" }
+  :type => 'hash',
+  :default => { '127.0.0.1/8' => 'allow', '0.0.0.0/0' => 'refuse' }
 
 attribute 'unbound/logfile',
   :display_name => 'Log file',
-  :description => 'Log file to write to, default "" writes to stderr',
+  :description => 'Log file to write to, default '' writes to stderr',
   :default => ''
 
 attribute 'unbound/use_syslog',
@@ -79,7 +80,7 @@ attribute 'unbound/use_syslog',
 
 attribute 'unbound/chroot',
   :display_name => 'Chroot directory',
-  :description => 'Specifies the directory to chroot, default "" sets no chroot',
+  :description => 'Specifies the directory to chroot, default '' sets no chroot',
   :default => ''
 
 attribute 'unbound/remote_control/enable',
