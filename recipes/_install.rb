@@ -1,8 +1,6 @@
 #
 # Cookbook Name:: unbound
-# Provider:: rr
-#
-# Copyright 2011, Joshua Timberman
+# Recipe:: _install
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,14 +15,11 @@
 # limitations under the License.
 #
 
-def load_current_resource
-  @rr = Chef::Resource::UnboundRr.new(new_resource.name)
-  Chef::Log.debug("Checking for record #{new_resource.name}")
-  exists = false
-  @rr.exists(exists)
+case node['platform_family']
+when 'rhel'
+  include_recipe 'yum-epel' if node['unbound']['manage_package_repo']
 end
 
-action :add do
-  unless @rr.exists
-  end
+package node['unbound']['package_name'] do
+  action node['unbound']['package_action']
 end
