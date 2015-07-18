@@ -17,19 +17,10 @@
 
 include_recipe 'unbound::_install'
 
-# Ubuntu doesn't have a conf.d but it's a good pattern so let's make it work
-directory '/etc/unbound/conf.d' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-end
-
-template '/etc/unbound/conf.d/main.conf' do
-  source 'main.conf.erb'
-  owner 'root'
-  group 'root'
-  mode '0644'
-  notifies :reload, 'service[unbound]'
+unbound_config '/etc/unbound/conf.d/main.conf' do
+  action :create
+  config node['unbound']['config']
+  notifies :restart, 'service[unbound]'
 end
 
 %w(stub forward).each do |type|
@@ -47,7 +38,7 @@ end
         type: type,
         config: zone
       )
-      notifies :reload, 'service[unbound]'
+      notifies :restart, 'service[unbound]'
     end
   end
 end
@@ -58,7 +49,4 @@ directory node['unbound']['log_dir'] do
   mode '0750'
 end
 
-service node['unbound']['service_name'] do
-  supports status: true, start: true, stop: true, restart: true, reload: true
-  action [:start, :enable]
-end
+include_recipe 'unbound::_service'

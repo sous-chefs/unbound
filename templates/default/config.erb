@@ -2,7 +2,7 @@
 #
 # Main configuration file. Overrides unbound.conf default configuration
 
-<% node['unbound']['config'].each do |clause, config| -%>
+<% @config.each do |clause, config| -%>
 <%= clause %>:<% if config.is_a?(String) || config.is_a?(Integer) -%> <%= config.to_s %><% end -%>
 <%
   if config.is_a?(Hash)

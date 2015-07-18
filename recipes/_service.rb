@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: unbound
-# Recipe:: _install
+# Recipe:: _service
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,26 +15,7 @@
 # limitations under the License.
 #
 
-case node['platform_family']
-when 'rhel'
-  include_recipe 'yum-epel' if node['unbound']['manage_package_repo']
+service node['unbound']['service_name'] do
+  supports status: true, start: true, stop: true, restart: true
+  action [:start, :enable]
 end
-
-package node['unbound']['package_name'] do
-  action node['unbound']['package_action']
-end
-
-# Ubuntu doesn't have a conf.d but it's a good pattern so let's make it work
-directory '/etc/unbound/conf.d' do
-  owner 'root'
-  group 'root'
-  mode '0755'
-end
-
-unbound_config '/etc/unbound/unbound.conf' do
-  action :insert
-  config 'include' => '/etc/unbound/conf.d/*.conf'
-  notifies :restart, 'service[unbound]'
-end
-
-
