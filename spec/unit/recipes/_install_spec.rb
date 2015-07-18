@@ -43,7 +43,7 @@ describe 'unbound::default' do
     it { is_expected.to install_package('unbound-special') }
   end
 
-  context 'debian distro' do
+  context 'with debian' do
     cached(:chef_run) do
       ChefSpec::SoloRunner.new(platform: 'debian', version: '7.6')
         .converge(described_recipe)
