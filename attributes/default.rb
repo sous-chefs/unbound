@@ -1,32 +1,50 @@
-default['unbound']['interface'] = [ node['ipaddress'] ]
-default['unbound']['outgoing_interface'] = nil
-default['unbound']['port'] = 53
-default['unbound']['num_threads'] = 1
-default['unbound']['enable_ipv4'] = true
-default['unbound']['enable_ipv6'] = false
-default['unbound']['enable_tcp'] = true
-default['unbound']['enable_udp'] = true
-default['unbound']['access_control'] = { "127.0.0.1/8" => "allow", "0.0.0.0/0" => "refuse" }
-default['unbound']['logfile'] =  ""
-default['unbound']['use_syslog'] = "yes"
+#<> The name of the package to install
+default['unbound']['package_name'] = 'unbound'
+#<> Install or upgrade the package
+default['unbound']['package_action'] = :upgrade
+#<> The name of the service to manage
+default['unbound']['service_name'] = 'unbound'
+#<> Manage the yum/apt repository definition
+default['unbound']['manage_package_repo'] = true
 
-default['unbound']['remote_control']['enable'] = "no"
-default['unbound']['remote_control']['interface'] = "127.0.0.1"
-default['unbound']['remote_control']['port'] = "953"
+#<
+# Array of stub zones.
+# ```
+# [
+#   {
+#     "name"       => "example.com",
+#     "stub-addr"  => "192.0.2.68",
+#     "stub-prime" => "no"
+#   }
+# }
+# ```
+#>
+default['unbound']['stub_zones'] = {}
 
-default['unbound']['stats']['interval'] = 0
-default['unbound']['stats']['cumulative'] = "no"
-default['unbound']['stats']['extended'] = "no"
+#<
+# Array of forward zones
+# ```
+# [
+#   {
+#     "name"         => "example.com",
+#     "forward-addr" => "192.0.2.68",
+#     "forward-host" => "fwd.example.com"
+#   }
+# ]
+# ```
+#>
+default['unbound']['forward_zones'] = {}
 
-#default['unbound']['dnssec'] - disabled by default, future todo
+#<> The log directory to manage
+default['unbound']['log_dir'] = '/var/log/unbound'
 
-case node['platform']
-when "freebsd"
-  default['unbound']['directory'] = "/usr/local//etc/unbound"
-  default['unbound']['pidfile'] = "/usr/local/etc/unbound/unbound.pid"
-  default['unbound']['bindir'] = "/usr/local/sbin"
-else
-  default['unbound']['directory'] = "/etc/unbound"
-  default['unbound']['pidfile'] = "/var/run/unbound.pid"
-  default['unbound']['bindir'] = "/usr/sbin"
-end
+#<> Raw configuration hash.
+default['unbound']['config'] = {}
+
+#<
+# Configure a log file by default. May be overwritten depending
+# on how the user sets config hash.
+# TODO: Note in README
+#>
+default['unbound']['config']['server']['logfile'] =
+ '/var/log/unbound/unbound.log'
