@@ -13,6 +13,7 @@ module UnboundConfig
     attribute :owner, kind_of: String, default: 'root'
     attribute :group, kind_of: String, default: 'root'
     attribute :mode, kind_of: String, default: '0644'
+    attribute :cookbook, kind_of: String, default: 'unbound'
   end
 
   class Provider < Chef::Provider
@@ -53,6 +54,8 @@ module UnboundConfig
           group new_resource.group
           mode new_resource.mode
           variables config: new_resource.config
+          # Required for unit tests. Might be a better way to do this, but it works.
+          cookbook new_resource.cookbook
         end
       end
     end
