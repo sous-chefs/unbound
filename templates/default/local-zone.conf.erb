@@ -35,7 +35,7 @@
 # you need to do the reverse notation yourself.
 # local-data-ptr: "192.0.2.3 www.example.com"
 server:
-  local-zone: "<%= @local_zone['id'].gsub(/_/, ".") %>." static
+  local-zone: "<%= @local_zone['id'].gsub(/_/, ".") %>." <% if @local_zone.key?('type') %><%= @local_zone['type'] %><% else %>static<% end %>
   <% @local_zone['ns'].each do |rr| -%>
     <% rr.each do |fqdn,ip| -%>
   local-data: "<%= fqdn %>. 10800 IN NS <%= ip %>"
@@ -44,5 +44,6 @@ server:
   <% @local_zone['host'].each do |rr| -%>
     <% rr.each do |fqdn,ip| -%>
   local-data: "<%= fqdn %>. 10800 IN A <%= ip %>"
+  local-data-ptr: "<%= ip %> <%= fqdn %>"
     <% end -%>
   <% end -%>
