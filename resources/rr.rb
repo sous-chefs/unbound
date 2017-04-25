@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+default_action :add
 actions :add
 
 attribute :fqdn,     kind_of: String, name_attribute: true
