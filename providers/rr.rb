@@ -17,6 +17,8 @@
 # limitations under the License.
 #
 
+use_inline_resources
+
 def load_current_resource
   @rr = Chef::Resource::UnboundRr.new(new_resource.name)
   Chef::Log.debug("Checking for record #{new_resource.name}")

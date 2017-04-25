@@ -18,56 +18,54 @@
 #
 
 root_group = value_for_platform(
-  "freebsd" => { "default" => "wheel" },
-  "default" => "root"
+  'freebsd' => { 'default' => 'wheel' },
+  'default' => 'root'
 )
 
-package "unbound" do
+package 'unbound' do
   action :upgrade
 end
 
 directory "#{node['unbound']['directory']}/conf.d" do
   mode 0755
-  owner "root"
+  owner 'root'
   group root_group
 end
 
 template "#{node['unbound']['directory']}/unbound.conf" do
-  source "unbound.conf.erb"
+  source 'unbound.conf.erb'
   mode 0644
-  owner "root"
+  owner 'root'
   group root_group
-  notifies :restart, "service[unbound]"
+  notifies :restart, 'service[unbound]'
 end
 
 begin
-  local_zone = data_bag_item("dns", node['dns']['domain'].gsub(/\./, "_"))
+  local_zone = data_bag_item('dns', node['dns']['domain'].tr('.', '_'))
 rescue
   local_zone = node['dns']['domain']
 end
 
-%w{ local forward stub }.each do |type|
-
+%w( local forward stub ).each do |type|
   template "#{node['unbound']['directory']}/conf.d/#{type}-zone.conf" do
     source "#{type}-zone.conf.erb"
     mode 0644
-    owner "root"
+    owner 'root'
     group root_group
-    variables(:local_zone => local_zone)
-    notifies :restart, "service[unbound]"
+    variables(local_zone: local_zone)
+    notifies :restart, 'service[unbound]'
   end
-
 end
 
 # Not yet supported.
 # include_recipe "unbound::remote_control" if node['unbound']['remote_control']['enable']
 
-service "unbound" do
+service 'unbound' do
   supports value_for_platform(
-    ["redhat", "centos", "fedora"] => { "default" => ["status", "restart", "reload"]},
-    "freebsd" => {"default" => ["status", "restart", "reload"]},
-    ["debian", "ubuntu"] => {"default" => ["restart"]},
-    "default" => "restart"
+    %w(redhat centos fedora) => { 'default' => %w(status restart reload) },
+    'freebsd' => { 'default' => %w(status restart reload) },
+    %w(debian ubuntu) => { 'default' => ['restart'] },
+    'default' => 'restart'
   )
   action [:enable, :start]
 end
