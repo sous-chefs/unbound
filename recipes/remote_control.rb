@@ -18,24 +18,24 @@
 #
 
 root_group = value_for_platform(
-  "freebsd" => { "default" => "wheel" },
-  "default" => "root"
+  'freebsd' => { 'default' => 'wheel' },
+  'default' => 'root'
 )
 
-node.set['unbound']['remote_control']['server_key'] =  File.join(node['unbound']['directory'], "unbound_server.key")
-node.set['unbound']['remote_control']['server_cert'] =  File.join(node['unbound']['directory'], "unbound_server.pem")
-node.set['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], "unbound_control.key")
-node.set['unbound']['remote_control']['control_cert'] =  File.join(node['unbound']['directory'], "unbound_control.pem")
+node.set['unbound']['remote_control']['server_key'] = File.join(node['unbound']['directory'], 'unbound_server.key')
+node.set['unbound']['remote_control']['server_cert'] =  File.join(node['unbound']['directory'], 'unbound_server.pem')
+node.set['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], 'unbound_control.key')
+node.set['unbound']['remote_control']['control_cert'] = File.join(node['unbound']['directory'], 'unbound_control.pem')
 
 template "#{node['unbound']['directory']}/conf.d/remote-control.conf" do
-  source "remote-control.conf.erb"
+  source 'remote-control.conf.erb'
   mode 0644
-  owner "root"
+  owner 'root'
   group root_group
-  variables :control => node['unbound']['remote_control']
-  notifies :restart, "service[unbound]"
+  variables control: node['unbound']['remote_control']
+  notifies :restart, 'service[unbound]'
 end
 
 execute "#{node['unbound']['bindir']}/unbound-control-setup" do
-  not_if { ::File.exists?(node['unbound']['remote_control']['control_cert']) }
+  not_if { ::File.exist?(node['unbound']['remote_control']['control_cert']) }
 end
