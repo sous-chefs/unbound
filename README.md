@@ -1,12 +1,12 @@
-Description
-===========
+# Unbound Cookbook
+
+[![Build Status](https://travis-ci.org/sous-chefs/unbound.svg?branch=master)](https://travis-ci.org/sous-chefs/unbound) [![Cookbook Version](https://img.shields.io/cookbook/v/unbound.svg)](https://supermarket.chef.io/cookbooks/unbound)
 
 Installs and manages the unbound DNS server.
 
 * http://unbound.net
 
-Requirements
-============
+## Requirements
 
 A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported. See the __Attributes__ section.
 
@@ -17,8 +17,7 @@ A platform with unbound available as a native package. The following platforms h
 
 OpenSUSE seems to have removed the unbound package from recent versions, though 1.0.0 was in 11.1.
 
-Attributes
-==========
+## Attributes
 
 For information about attributes, see the cookbook metadata. Either view the metadata.rb in the cookbook, or review from the Chef server.
 
@@ -26,8 +25,7 @@ For information about attributes, see the cookbook metadata. Either view the met
 
 Some values are calculated in the attributes file or in the respective recipes.
 
-Resources
-=========
+## Resources
 
 TODO:
 
@@ -35,35 +33,29 @@ Not yet supported.
 
 This cookbook will provide `unbound_rr`, a resource for managing resource records through unbound-control(8) command in the future. This will require that `node['unbound']['remote_control']['enable']` is true.
 
-Templates
-=========
+## Templates
 
 For configuration not handled by the template and cookbook attribute values, edit the template for the local environment.
 
-unbound.conf
-------------
+### unbound.conf
 
 The main configuration file for unbound. Many settings in the template are controlled via attribute values. The file is located in the `node['unbound']['directory']`.
 
 The config file created by this cookbook will use unbound's `include` directive for zone files, which will be located in the `node['unbound']['directory']`'s `conf.d` directory.
 
-local-zone.conf
----------------
+### local-zone.conf
 
 Set up local network resolver configuration with local-zone.conf.
 
-stub-zone.conf
----------------
+### stub-zone.conf
 
 Edit the stub-zone.erb template to create a stub zone configuration.
 
-forward-zone.conf
------------------
+### forward-zone.conf
 
 Edit the forward-zone.erb template to create a forward zone configuration.
 
-remote-control.conf
--------------------
+### remote-control.conf
 
 TODO:
 
@@ -71,23 +63,19 @@ Not yet supported.
 
 Sets up the remote-control settings via the `unbound::remote-control` recipe.
 
-Recipes
-=======
+## Recipes
 
-default
--------
+### default
 
 Installs unbound and sets up the configuration file(s).
 
 The recipe will load the local zone data from a data bag if present, otherwise it will attempt to use `node['dns']['domain']` attribute. The various templates can be edited as required by the local user.
 
-chroot
-------
+### chroot
 
 The intention of this recipe will be to setup the chroot environment if the chroot setting is enabled. However it is not yet complete.
 
-`remote_control`
-----------------
+### `remote_control`
 
 TODO:
 
@@ -95,8 +83,7 @@ Not yet supported.
 
 Sets up remote control certificate attributes using the unbound configuration directory. Also creates the config file for remote-control settings and creates the certificates with unbound-control-setup.
 
-Usage
-=====
+## Usage
 
 Create a role for the unbound server like this:
 
@@ -140,27 +127,23 @@ Unbound itself doesn't support CNAME records. To use this as attributes on the n
 
 * Note: This is untested with node attributes
 
-Chroot
-------
+### Chroot
 
 TODO:
 
 Not yet fully implemented.
 
-Access Control
---------------
+### Access Control
 
 Set the `node['unbound']['access_control']` attribute as a hash in the role to specify the netblock and action.
 
-Remote Control
---------------
+### Remote Control
 
 TODO:
 
 Not yet supported.
 
-License and Author
-==================
+## License and Author
 
 Copyright 2011, Joshua Timberman (<cookbooks@housepub.org>)
 
