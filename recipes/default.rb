@@ -46,13 +46,23 @@ rescue
   local_zone = node['dns']['domain']
 end
 
+begin
+  forward_zone = data_bag_item('dns', node['dns']['forward_zone'].tr('.', '_'))
+rescue
+  forward_zone = node['dns']['forward_zone']
+end
+
 %w( local forward stub ).each do |type|
   template "#{node['unbound']['directory']}/conf.d/#{type}-zone.conf" do
     source "#{type}-zone.conf.erb"
     mode 0644
     owner 'root'
     group root_group
-    variables(local_zone: local_zone)
+    if type == "local"
+      variables(local_zone: local_zone)
+    elsif type == "forward"
+        variables(forward_zone: forward_zone)
+    end
     notifies :restart, 'service[unbound]'
   end
 end
