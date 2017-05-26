@@ -12,4 +12,17 @@
 # forward-zone:
 #   name: "example.org"
 #   forward-host: fwd.example.com
-
+server:
+<% @forward_zone.each do |dex,val| -%>
+  <% val.each do |rr| -%>
+    <% rr.each do |fqdn,frwd| -%>
+  forward-zone:
+    name: "<%= fqdn %>."
+      <% if frwd =~ /\d+.\d+.\d+.\d+/ %>
+    forward-addr: "<%= frwd %>"
+      <% else %>
+    forward-host: "<%= frwd %>"
+      <% end -%>
+    <% end -%>
+  <% end -%>
+<% end -%>
