@@ -109,6 +109,12 @@ The `node['dns']['domain']` is used to select the data bag (if it exists), or ca
       "host": [
         { "www.int.example.com": "10.1.1.200" }
       ]
+      "forward1": [
+        { "forward.example.com: "10.1.1.200" }
+      ]
+      "forward2": [
+        { "forward2.example.com: "ns1.none.none" }
+      ]
     }
 
 Unbound itself doesn't support CNAME records. To use this as attributes on the node, put this in the default attributes section of the role (per above).
