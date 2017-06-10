@@ -67,9 +67,6 @@ end
   end
 end
 
-# Not yet supported.
-# include_recipe "unbound::remote_control" if node['unbound']['remote_control']['enable']
-
 service 'unbound' do
   supports value_for_platform(
     %w(redhat centos fedora) => { 'default' => %w(status restart reload) },
