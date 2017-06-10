@@ -23,5 +23,4 @@ property :cwd,      kind_of: String
 property :exists,   kind_of: NilClass, default: nil
 
 action :add do
-  
 end
