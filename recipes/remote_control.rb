@@ -22,10 +22,10 @@ root_group = value_for_platform(
   'default' => 'root'
 )
 
-node.set['unbound']['remote_control']['server_key'] = File.join(node['unbound']['directory'], 'unbound_server.key')
-node.set['unbound']['remote_control']['server_cert'] =  File.join(node['unbound']['directory'], 'unbound_server.pem')
-node.set['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], 'unbound_control.key')
-node.set['unbound']['remote_control']['control_cert'] = File.join(node['unbound']['directory'], 'unbound_control.pem')
+node.default['unbound']['remote_control']['server_key'] = File.join(node['unbound']['directory'], 'unbound_server.key')
+node.default['unbound']['remote_control']['server_cert'] =  File.join(node['unbound']['directory'], 'unbound_server.pem')
+node.default['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], 'unbound_control.key')
+node.default['unbound']['remote_control']['control_cert'] = File.join(node['unbound']['directory'], 'unbound_control.pem')
 
 template "#{node['unbound']['directory']}/conf.d/remote-control.conf" do
   source 'remote-control.conf.erb'
