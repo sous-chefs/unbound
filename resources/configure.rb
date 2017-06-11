@@ -26,7 +26,7 @@ property :enable_ipv4, [true, false], default: true
 property :enable_ipv6, [true, false], default: false
 property :enable_tcp, [true, false], default: true
 property :enable_udp, [true, false], default: true
-property :access_control, [Hash, Array],  default: { '127.0.0.1/8' => 'allow', '0.0.0.0/0' => 'refuse' }
+property :access_control, [Hash, Array], default: { '127.0.0.1/8' => 'allow', '0.0.0.0/0' => 'refuse' }
 property :logfile, String
 property :use_syslog, String, equal_to: %w(yes no), default: 'yes'
 property :stats_interval, Integer, default: 0
@@ -51,7 +51,6 @@ property :bindir, String, default: lazy {
 }
 
 action :create do
-
   template "#{new_resource.dir}/unbound.conf" do
     source 'unbound.conf.erb'
     mode 0644
@@ -75,7 +74,7 @@ action :create do
       chroot: new_resource.chroot,
       logfile: new_resource.logfile,
       use_syslog: new_resource.use_syslog,
-      pid_file: new_resource.pid_file,
+      pid_file: new_resource.pid_file
     )
     notifies :restart, 'service[unbound]', :delayed
   end
