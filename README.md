@@ -28,8 +28,7 @@ Configures:
 - local-zone.conf
 - stub-zone.conf
 
-
-
+For example usage see `test/fixtures/cookbooks/test/recipes/configure.rb`
 
 ### unbound.conf
 

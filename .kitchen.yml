@@ -31,3 +31,6 @@ suites:
         forward_zone:
           forward1: [{ "forward.example.com": "10.1.1.201" }]
           forward2: [{ "forward2.example.com": "ns1.none" }]
+  - name: configure
+    run_list:
+      - 'recipe[test::configure]'
