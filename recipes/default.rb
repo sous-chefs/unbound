@@ -17,62 +17,18 @@
 # limitations under the License.
 #
 
-root_group = value_for_platform(
-  'freebsd' => { 'default' => 'wheel' },
-  'default' => 'root'
-)
+unbound_install 'unbound'
 
-package 'unbound' do
-  action :upgrade
-end
-
-directory "#{node['unbound']['directory']}/conf.d" do
-  mode 0755
-  owner 'root'
-  group root_group
-end
-
-template "#{node['unbound']['directory']}/unbound.conf" do
-  source 'unbound.conf.erb'
-  mode 0644
-  owner 'root'
-  group root_group
-  notifies :restart, 'service[unbound]'
-end
-
-begin
-  local_zone = data_bag_item('dns', node['dns']['domain'].tr('.', '_'))
-rescue
-  local_zone = node['dns']['domain']
-end
-
-begin
-  forward_zone = data_bag_item('dns', node['dns']['forward_zone'].tr('.', '_'))
-rescue
-  forward_zone = node['dns']['forward_zone']
-end
-
-%w( local forward stub ).each do |type|
-  template "#{node['unbound']['directory']}/conf.d/#{type}-zone.conf" do
-    source "#{type}-zone.conf.erb"
-    mode 0644
-    owner 'root'
-    group root_group
-    if type == 'local'
-      variables(local_zone: local_zone)
-    elsif type == 'forward'
-      variables(forward_zone: forward_zone)
-    end
-    notifies :restart, 'service[unbound]'
+unbound_configure 'bar' do
+  begin
+    local_zone data_bag_item('dns', node['dns']['domain'].tr('.', '_'))
+  rescue
+    local_zone node['dns']['domain']
   end
-end
 
-service 'unbound' do
-  supports value_for_platform(
-    %w(redhat centos fedora) => { 'default' => %w(status restart reload) },
-    'freebsd' => { 'default' => %w(status restart reload) },
-    %w(debian ubuntu) => { 'default' => ['restart'] },
-    'default' => 'restart'
-  )
-  action [:enable, :start]
+  begin
+    forward_zone data_bag_item('dns', node['dns']['forward_zone'].tr('.', '_'))
+  rescue
+    forward_zone node['dns']['forward_zone']
+  end
 end

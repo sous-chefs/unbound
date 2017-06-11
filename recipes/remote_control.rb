@@ -27,7 +27,7 @@ node.default['unbound']['remote_control']['server_cert'] =  File.join(node['unbo
 node.default['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], 'unbound_control.key')
 node.default['unbound']['remote_control']['control_cert'] = File.join(node['unbound']['directory'], 'unbound_control.pem')
 
-template "#{node['unbound']['directory']}/conf.d/remote-control.conf" do
+template "#{node['unbound']['directory']}/unbound.conf.d/remote-control.conf" do
   source 'remote-control.conf.erb'
   mode 0644
   owner 'root'
