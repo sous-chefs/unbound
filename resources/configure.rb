@@ -65,7 +65,6 @@ action :create do
       num_threads: new_resource.num_threads,
       port: new_resource.port,
       dir: new_resource.dir,
-      num_threads: new_resource.num_threads,
       outgoing_interface: new_resource.outgoing_interface,
       enable_udp: new_resource.enable_udp,
       enable_tcp: new_resource.enable_tcp,
@@ -107,7 +106,7 @@ action :create do
 
   service 'unbound' do
     case node['platform_family']
-    when %w(redhat freebsd amazon)
+    when %w(centos redhat scientific oracle freebsd amazon)
       supports status: true, restart: true, reload: true
     when 'debian'
       supports restart: true
