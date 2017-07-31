@@ -2,8 +2,16 @@
 driver:
   name: vagrant
 
+
 provisioner:
-  name: chef_solo
+  name: chef_zero
+
+client_rb:
+  treat_deprecation_warnings_as_errors: true
+  resource_cloning: false
+
+verifier:
+  name: inspec
 
 platforms:
   - name: ubuntu-14.04
@@ -13,7 +21,7 @@ platforms:
 suites:
   - name: default
     run_list:
-      - 'recipe[unbound::default]'
+      - 'recipe[test::default]'
     attributes:
       dns:
         domain:
@@ -23,3 +31,6 @@ suites:
         forward_zone:
           forward1: [{ "forward.example.com": "10.1.1.201" }]
           forward2: [{ "forward2.example.com": "ns1.none" }]
+  - name: configure
+    run_list:
+      - 'recipe[test::configure]'

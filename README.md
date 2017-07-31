@@ -8,40 +8,31 @@ Installs and manages the unbound DNS server.
 
 ## Requirements
 
-A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported. See the __Attributes__ section.
+A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported.
 
 * Ubuntu/Debian
 * Red Hat/CentOS/Fedora (requires EPEL)
-* ArchLinux
 * FreeBSD
-
-OpenSUSE seems to have removed the unbound package from recent versions, though 1.0.0 was in 11.1.
-
-## Attributes
-
-For information about attributes, see the cookbook metadata. Either view the metadata.rb in the cookbook, or review from the Chef server.
-
-    knife cookbook show unbound VERSION
-
-Some values are calculated in the attributes file or in the respective recipes.
 
 ## Resources
 
-TODO:
+### unbound_install
 
-Not yet supported.
+Install unbound from package.
 
-This cookbook will provide `unbound_rr`, a resource for managing resource records through unbound-control(8) command in the future. This will require that `node['unbound']['remote_control']['enable']` is true.
+### unbound_configure
 
-## Templates
+Configures:
+- unbound.conf
+- forward-zone.conf
+- local-zone.conf
+- stub-zone.conf
 
-For configuration not handled by the template and cookbook attribute values, edit the template for the local environment.
+For example usage see `test/fixtures/cookbooks/test/recipes/configure.rb`
 
 ### unbound.conf
 
-The main configuration file for unbound. Many settings in the template are controlled via attribute values. The file is located in the `node['unbound']['directory']`.
-
-The config file created by this cookbook will use unbound's `include` directive for zone files, which will be located in the `node['unbound']['directory']`'s `conf.d` directory.
+The main configuration file for unbound. Many settings in the template are controlled via properties on the `unbound_configure` resource. The file is located in the location specified in the `dir` property.
 
 ### local-zone.conf
 
@@ -55,103 +46,30 @@ Edit the stub-zone.erb template to create a stub zone configuration.
 
 Edit the forward-zone.erb template to create a forward zone configuration.
 
-### remote-control.conf
-
-TODO:
-
-Not yet supported.
-
-Sets up the remote-control settings via the `unbound::remote-control` recipe.
-
 ## Recipes
 
 ### default
 
-Installs unbound and sets up the configuration file(s).
+Installs and configures unbound using defaults.
 
-The recipe will load the local zone data from a data bag if present, otherwise it will attempt to use `node['dns']['domain']` attribute. The various templates can be edited as required by the local user.
+This example recipe will load the local zone data from a data bag if present, otherwise it will attempt to use `node['dns']['domain']` attribute. The various templates can be edited as required by the local user.
 
-### chroot
+If this does not meet your needs use the `unbound_configure` resource directly.
+
+### chroot (TODO)
 
 The intention of this recipe will be to setup the chroot environment if the chroot setting is enabled. However it is not yet complete.
 
-### `remote_control`
-
-TODO:
-
-Not yet supported.
+### `remote_control` (TODO)
 
 Sets up remote control certificate attributes using the unbound configuration directory. Also creates the config file for remote-control settings and creates the certificates with unbound-control-setup.
 
 ## Usage
 
-Create a role for the unbound server like this:
-
-    name "unbound"
-    description "DNS Server"
-    default_attributes(
-      "dns" => {
-        "domain" => "int.example.com"
-      },
-      "unbound" => {
-        "access_control" => { "127.0.0.1/8" => "allow", "0.0.0.0/0" => "allow" }
-      }
-    )
-    run_list( "recipe[unbound]")
-
-The `node['dns']['domain']` is used to select the data bag (if it exists), or can be a hash of local zone domain attributes. If using a data bag, it should have the following basic structure.
-
-    {
-      "id": "int_example_com",
-      "ns": [
-        { "int.example.com": "127.0.0.1" }
-      ],
-      "host": [
-        { "www.int.example.com": "10.1.1.200" }
-      ]
-      "forward1": [
-        { "forward.example.com: "10.1.1.200" }
-      ]
-      "forward2": [
-        { "forward2.example.com: "ns1.none.none" }
-      ]
-    }
-
-Unbound itself doesn't support CNAME records. To use this as attributes on the node, put this in the default attributes section of the role (per above).
-
-    default_attributes(
-      "unbound" => {
-        "id" => "int_example_com",
-        "ns" => [
-          { "int.example.com" => "127.0.0.1" }
-        ],
-        "host" => [
-          { "www.int.example.com" => "10.1.1.200" }
-        ]
-      }
-    )
-
-* Note: This is untested with node attributes
-
-### Chroot
-
-TODO:
-
-Not yet fully implemented.
-
-### Access Control
-
-Set the `node['unbound']['access_control']` attribute as a hash in the role to specify the netblock and action.
-
-### Remote Control
-
-TODO:
-
-Not yet supported.
-
 ## License and Author
 
 Copyright 2011, Joshua Timberman (<cookbooks@housepub.org>)
+Copyright 2017, Dan Webb (<dan.webb@damacus.io>)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

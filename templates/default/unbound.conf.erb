@@ -8,7 +8,7 @@
 #Use this to include other text into the file.
 #include: "otherfile.conf"
 
-# The server clause sets the main parameters. 
+# The server clause sets the main parameters.
 server:
   # whitespace is not necessary, but looks cleaner.
 
@@ -18,40 +18,40 @@ server:
   # print statistics to the log (for every thread) every N seconds.
   # Set to "" or 0 to disable. Default is disabled.
   # statistics-interval: 0
-  statistics-interval: <%= node['unbound']['stats']['interval'] %>
+  statistics-interval: <%= @stats_interval %>
 
   # enable cumulative statistics, without clearing them after printing.
   # statistics-cumulative: no
-  statistics-cumulative: <%= node['unbound']['stats']['cumulative'] %>
+  statistics-cumulative: <%= @stats_cumulative %>
 
   # enable extended statistics (query types, answer codes, status)
   # printed from unbound-control. default off, because of speed.
   # extended-statistics: no
-  extended-statistics: <%= node['unbound']['stats']['extended'] %>
+  extended-statistics: <%= @stats_extended %>
 
   # number of threads to create. 1 disables threading.
-  num-threads: <%= node['unbound']['num_threads'] %>
+  num-threads: <%= @num_threads %>
 
   # specify the interfaces to answer queries from by ip-address.
   # The default is to listen to localhost (127.0.0.1 and ::1).
   # specify 0.0.0.0 and ::0 to bind to all available interfaces.
   # specify every interface[@port] on a new 'interface:' labelled line.
-  # The listen interfaces are not changed on reload, only on restart.
+  # The liseten interfaces are not changed on reload, only on restart.
   # interface: 192.0.2.153
   # interface: 192.0.2.154
   # interface: 192.0.2.154@5003
   # interface: 2001:DB8::5
-  <% node['unbound']['interface'].each do |interface| %>
+  <% @interface.each do |interface| %>
   interface: <%= interface %>
   <% end -%>
 
   # enable this feature to copy the source address of queries to reply.
-  # Socket options are not supported on all platforms. experimental. 
+  # Socket options are not supported on all platforms. experimental.
   # interface-automatic: no
 
   # port to answer queries from
   # port: 53
-  port: <%= node['unbound']['port'] %>
+  port: <%= @port %>
 
   # specify the interfaces to send outgoing queries to authoritative
   # server from by ip-address. If none, the default (all) interface
@@ -59,12 +59,12 @@ server:
   # outgoing-interface: 192.0.2.153
   # outgoing-interface: 2001:DB8::5
   # outgoing-interface: 2001:DB8::6
-  <% node['unbound']['outgoing_interface'].each do |interface| %>
+  <% @outgoing_interface.each do |interface| %>
   outgoing-interface: <%= interface %>
-  <% end if node['unbound']['outgoing_interface'] -%>
+  <% end if @outgoing_interface -%>
 
   # number of ports to allocate per thread, determines the size of the
-  # port range that can be open simultaneously. 
+  # port range that can be open simultaneously.
   # outgoing-range: 256
 
   # permit unbound to use this port number or port range for
@@ -97,7 +97,7 @@ server:
   # msg-buffer-size: 65552
 
   # the amount of memory to use for the message cache.
-  # plain value in bytes or you can append k, m or G. default is "4Mb". 
+  # plain value in bytes or you can append k, m or G. default is "4Mb".
   # msg-cache-size: 4m
 
   # the number of slabs to use for the message cache.
@@ -112,7 +112,7 @@ server:
   # jostle-timeout: 200
 
   # the amount of memory to use for the RRset cache.
-  # plain value in bytes or you can append k, m or G. default is "4Mb". 
+  # plain value in bytes or you can append k, m or G. default is "4Mb".
   # rrset-cache-size: 4m
 
   # the number of slabs to use for the RRset cache.
@@ -147,23 +147,23 @@ server:
   # infra-cache-lame-size: 10k
 
   # Enable IPv4, "yes" or "no".
-  # do-ip4: yes
-  <% if node['unbound']['enable_ipv4'] -%>
+  <% if @enable_ipv4 -%>
   do-ip4: yes
   <% end -%>
 
   # Enable IPv6, "yes" or "no".
   # do-ip6: yes
+  <% if @enable_ipv6 -%>
+  do-ip6: yes
+  <% end -%>
 
   # Enable UDP, "yes" or "no".
-  # do-udp: yes
-  <% if node['unbound']['enable_udp'] -%>
+  <% if @enable_udp -%>
   do-udp: yes
   <% end -%>
 
   # Enable TCP, "yes" or "no".
-  # do-tcp: yes
-  <% if node['unbound']['enable_tcp'] -%>
+  <% if @enable_tcp -%>
   do-tcp: yes
   <% end -%>
 
@@ -180,7 +180,7 @@ server:
   # access-control: ::0/0 refuse
   # access-control: ::1 allow
   # access-control: ::ffff:127.0.0.1 allow
-  <% node['unbound']['access_control'].each do |netblock,action| -%>
+  <% @access_control.each do |netblock,action| -%>
   access-control: <%= netblock %> <%= action %>
   <% end -%>
 
@@ -190,8 +190,8 @@ server:
   #
   # If chroot is enabled, you should pass the configfile (from the
   # commandline) as a full path from the original root. After the
-  # chroot has been performed the now defunct portion of the config 
-  # file path is removed to be able to reread the config after a reload. 
+  # chroot has been performed the now defunct portion of the config
+  # file path is removed to be able to reread the config after a reload.
   #
   # All other file paths (working dir, logfile, roothints, and
   # key files) can be specified in several ways:
@@ -200,7 +200,7 @@ server:
   # 	o as an absolute path relative to the original root.
   # In the last case the path is adjusted to remove the unused portion.
   #
-  # The pid file can be absolute and outside of the chroot, it is 
+  # The pid file can be absolute and outside of the chroot, it is
   # written just prior to performing the chroot and dropping permissions.
   #
   # Additionally, unbound may need to access /dev/random (for entropy).
@@ -208,31 +208,31 @@ server:
   #
   # If you give "" no chroot is performed. The path must not end in a /.
   # chroot: "/var/lib/unbound"
-  chroot: "<%= node['unbound']['chroot'] %>"
+  chroot: "<%= @chroot %>"
 
   # if given, user privileges are dropped (after binding port),
   # and the given username is assumed. Default is user "unbound".
   # If you give "" no privileges are dropped.
   # username: "unbound"
 
-  # the working directory. The relative files in this config are 
+  # the working directory. The relative files in this config are
   # relative to this directory. If you give "" the working directory
   # is not changed.
-  directory: "<%= node['unbound']['directory'] %>"
+  directory: "<%= @dir %>"
 
-  # the log file, "" means log to stderr. 
+  # the log file, "" means log to stderr.
   # Use of this option sets use-syslog to "no".
-  logfile: "<%= node['unbound']['logfile'] %>"
+  logfile: "<%= @logfile %>"
 
-  # Log to syslog(3) if yes. The log facility LOG_DAEMON is used to 
+  # Log to syslog(3) if yes. The log facility LOG_DAEMON is used to
   # log to, with identity "unbound". If yes, it overrides the logfile.
-  use-syslog: "<%= node['unbound']['use_syslog'] %>" 
+  use-syslog: "<%= @use_syslog %>"
 
   # print UTC timestamp in ascii to logfile, default is epoch in seconds.
   # log-time-ascii: no
 
   # the pid file. Can be an absolute path outside of chroot/work dir.
-  pidfile: "<%= node['unbound']['pidfile'] %>"
+  pidfile: "<%= @pid_file %>"
 
   # file to read root hints from.
   # get one from ftp://FTP.INTERNIC.NET/domain/named.cache
@@ -251,8 +251,8 @@ server:
   # version: ""
 
   # the target fetch policy.
-  # series of integers describing the policy per dependency depth. 
-  # The number of values in the list determines the maximum dependency 
+  # series of integers describing the policy per dependency depth.
+  # The number of values in the list determines the maximum dependency
   # depth the recursor will pursue before giving up. Each integer means:
   # 	-1 : fetch all targets opportunistically,
   # 	0: fetch on demand,
@@ -260,24 +260,24 @@ server:
   # Enclose the list of numbers between quotes ("").
   # target-fetch-policy: "3 2 1 0 0"
 
-  # Harden against very small EDNS buffer sizes. 
+  # Harden against very small EDNS buffer sizes.
   # harden-short-bufsize: no
 
   # Harden against unseemly large queries.
   # harden-large-queries: no
 
-  # Harden against out of zone rrsets, to avoid spoofing attempts. 
+  # Harden against out of zone rrsets, to avoid spoofing attempts.
   # harden-glue: yes
 
   # Harden against receiving dnssec-stripped data. If you turn it
-  # off, failing to validate dnskey data for a trustanchor will 
+  # off, failing to validate dnskey data for a trustanchor will
   # trigger insecure mode for that zone (like without a trustanchor).
   # Default on, which insists on dnssec data for trust-anchored zones.
   # harden-dnssec-stripped: yes
 
         # Harden the referral path by performing additional queries for
   # infrastructure data.  Validates the replies (if possible).
-  # Default off, because the lookups burden the server.  Experimental 
+  # Default off, because the lookups burden the server.  Experimental
   # implementation of draft-wijngaards-dnsext-resolver-side-mitigation.
   # harden-referral-path: no
 
@@ -285,10 +285,10 @@ server:
   # This feature is an experimental implementation of draft dns-0x20.
   # use-caps-for-id: no
 
-  # Enforce privacy of these addresses. Strips them away from answers. 
-  # It may cause DNSSEC validation to additionally mark it as bogus. 
-  # Protects against 'DNS Rebinding' (uses browser as network proxy). 
-  # Only 'private-domain' and 'local-data' names are allowed to have 
+  # Enforce privacy of these addresses. Strips them away from answers.
+  # It may cause DNSSEC validation to additionally mark it as bogus.
+  # Protects against 'DNS Rebinding' (uses browser as network proxy).
+  # Only 'private-domain' and 'local-data' names are allowed to have
   # these private addresses. No default.
   # private-address: 10.0.0.0/8
   # private-address: 172.16.0.0/12
@@ -330,7 +330,7 @@ server:
   # with several entries, one file per entry.
   # Zone file format, with DS and DNSKEY entries.
   # trust-anchor-file: ""
-  
+
   # File with trusted keys, kept uptodate using RFC5011 probes,
   # initial file like trust-anchor-file, then it stores metadata.
   # Use several entries, one per domain name, to track multiple zones.
@@ -344,7 +344,7 @@ server:
 
   # File with trusted keys for validation. Specify more than one file
   # with several entries, one file per entry. Like trust-anchor-file
-  # but has a different file format. Format is BIND-9 style format, 
+  # but has a different file format. Format is BIND-9 style format,
   # the trusted-keys { name flag proto algo "key"; }; clauses are read.
   # trusted-keys-file: ""
 
@@ -353,7 +353,7 @@ server:
 
   # Override the date for validation with a specific fixed date.
   # Do not set this unless you are debugging signature inception
-  # and expiration. "" or "0" turns the feature off. 
+  # and expiration. "" or "0" turns the feature off.
   # val-override-date: ""
 
   # The time to live for bogus data, rrsets and messages. This avoids
@@ -368,7 +368,7 @@ server:
 
   # Should additional section of secure message also be kept clean of
   # unsecure data. Useful to shield the users of this validator from
-  # potential bogus data in the additional section. All unsigned data 
+  # potential bogus data in the additional section. All unsigned data
   # in the additional section is removed from secure messages.
   # val-clean-additional: yes
 
@@ -388,7 +388,7 @@ server:
   # A message with an NSEC3 with larger count is marked insecure.
   # List in ascending order the keysize and count values.
   # val-nsec3-keysize-iterations: "1024 150 2048 500 4096 2500"
-  
+
   # instruct the auto-trust-anchor-file probing to add anchors after ttl.
   # add-holddown: 2592000 # 30 days
 
@@ -400,7 +400,7 @@ server:
   # keep-missing: 31622400 # 366 days
 
   # the amount of memory to use for the key cache.
-  # plain value in bytes or you can append k, m or G. default is "4Mb". 
+  # plain value in bytes or you can append k, m or G. default is "4Mb".
   # key-cache-size: 4m
 
   # the number of slabs to use for the key cache.
@@ -409,7 +409,7 @@ server:
   # key-cache-slabs: 4
 
   # the amount of memory to use for the negative cache (used for DLV).
-  # plain value in bytes or you can append k, m or G. default is "1Mb". 
+  # plain value in bytes or you can append k, m or G. default is "1Mb".
   # neg-cache-size: 1m
 
 # Python config section. To enable:
@@ -420,6 +420,4 @@ python:
   # Script file to load
   # python-script: "/etc/unbound/ubmodule-tst.py"
 
-include: "<%= node['unbound']['directory'] %>/conf.d/local-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/stub-zone.conf"
-include: "<%= node['unbound']['directory'] %>/conf.d/forward-zone.conf"
+include: "/etc/unbound/unbound.conf.d/*.conf"
