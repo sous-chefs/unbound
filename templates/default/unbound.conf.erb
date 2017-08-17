@@ -315,7 +315,7 @@ server:
 
   # if yes, the above default do-not-query-address entries are present.
   # if no, localhost can be queried (for testing and debugging).
-  # do-not-query-localhost: yes
+  do-not-query-localhost: "<%= @do_not_query_localhost %>"
 
   # module configuration of the server. A string with identifiers
   # separated by spaces. "iterator" or "validator iterator"
@@ -349,7 +349,9 @@ server:
   # trusted-keys-file: ""
 
   # Ignore chain of trust. Domain is treated as insecure.
-  # domain-insecure: "example.com"
+  <% if @domain_insecure %>
+  domain-insecure: "<%= @domain_insecure %>"
+  <% end -%>
 
   # Override the date for validation with a specific fixed date.
   # Do not set this unless you are debugging signature inception
