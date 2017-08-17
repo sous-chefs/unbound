@@ -49,6 +49,8 @@ property :bindir, String, default: lazy {
     '/usr/sbin'
   end
 }
+property :do_not_query_localhost, String, equal_to: %w(yes no), default: 'yes'
+property :domain_insecure, String
 
 action :create do
   template "#{new_resource.dir}/unbound.conf" do

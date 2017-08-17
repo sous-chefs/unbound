@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## [1.0.1]
+
+- Add pamaeters to allow insecure forwarding to another local resolver
+
 ## [1.0.0]
 
 - Add new custom resources `unbound_install` & `unbound_configure`
