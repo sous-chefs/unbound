@@ -1,6 +1,7 @@
 property :name, String, name_property: true
 property :local_zone, [Hash, Array]
 property :forward_zone, [Hash, Array]
+property :stub_zone, [Hash, Array]
 property :root_group, String, default: lazy {
   case node['platform_family']
   when 'freebsd'
@@ -83,15 +84,18 @@ action :create do
 
   template "#{new_resource.dir}/unbound.conf.d/stub-zone.conf" do
     source 'stub-zone.conf.erb'
+    action (new_resource.stub_zone.nil? ? :create : :delete)
     cookbook 'unbound'
     mode 0644
     owner 'root'
     group root_group
+    variables(stub_zone: new_resource.stub_zone)
     notifies :restart, 'service[unbound]', :delayed
   end
 
   template "#{new_resource.dir}/unbound.conf.d/local-zone.conf" do
     source 'local-zone.conf.erb'
+    action (new_resource.local_zone.nil? ? :create : :delete)
     cookbook 'unbound'
     mode 0644
     owner 'root'
@@ -102,6 +106,7 @@ action :create do
 
   template "#{new_resource.dir}/unbound.conf.d/forward-zone.conf" do
     source 'forward-zone.conf.erb'
+    action (new_resource.forward_zone.nil? ? :create : :delete)
     cookbook 'unbound'
     mode 0644
     owner 'root'

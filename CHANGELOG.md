@@ -2,6 +2,10 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## [1.0.2]
+
+- Allow stub-zone to be configured, and make all zone files optional
+
 ## [1.0.1]
 
 - Add pamaeters to allow insecure forwarding to another local resolver

@@ -12,3 +12,17 @@
 # stub-zone:
 #   name: "example.org"
 #   stub-host: ns.example.com.
+server:
+<% @stub_zone.each do |dex,rrset| -%>
+  <% rrset.each do |rr| -%>
+    <% rr.each do |fqdn,stub| -%>
+  stub-zone:
+    name: "<%= fqdn %>."
+      <% if stub =~ /\d+\.\d+\.\d+\.\d+/ %>
+    stub-addr: "<%= stub %>"
+      <% else %>
+    stub-host: "<%= stub %>"
+      <% end -%>
+    <% end -%>
+  <% end -%>
+<% end -%>
