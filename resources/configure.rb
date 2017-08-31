@@ -84,34 +84,37 @@ action :create do
 
   template "#{new_resource.dir}/unbound.conf.d/stub-zone.conf" do
     source 'stub-zone.conf.erb'
-    action (new_resource.stub_zone.nil? ? :create : :delete)
+    action :create
     cookbook 'unbound'
     mode 0644
     owner 'root'
     group root_group
     variables(stub_zone: new_resource.stub_zone)
+    only_if { new_resource.stub_zone }
     notifies :restart, 'service[unbound]', :delayed
   end
 
   template "#{new_resource.dir}/unbound.conf.d/local-zone.conf" do
     source 'local-zone.conf.erb'
-    action (new_resource.local_zone.nil? ? :create : :delete)
+    action :create
     cookbook 'unbound'
     mode 0644
     owner 'root'
     group root_group
     variables(local_zone: new_resource.local_zone)
+    only_if { new_resource.local_zone }
     notifies :restart, 'service[unbound]', :delayed
   end
 
   template "#{new_resource.dir}/unbound.conf.d/forward-zone.conf" do
     source 'forward-zone.conf.erb'
-    action (new_resource.forward_zone.nil? ? :create : :delete)
+    action :create
     cookbook 'unbound'
     mode 0644
     owner 'root'
     group root_group
     variables(forward_zone: new_resource.forward_zone)
+    only_if { new_resource.forward_zone }
     notifies :restart, 'service[unbound]', :delayed
   end
 
