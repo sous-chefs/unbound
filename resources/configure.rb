@@ -52,6 +52,7 @@ property :bindir, String, default: lazy {
 }
 property :do_not_query_localhost, String, equal_to: %w(yes no), default: 'yes'
 property :domain_insecure, String
+property :verbosity, Integer, default: 0
 
 action :create do
   template "#{new_resource.dir}/unbound.conf" do
@@ -79,7 +80,8 @@ action :create do
       use_syslog: new_resource.use_syslog,
       pid_file: new_resource.pid_file,
       do_not_query_localhost: new_resource.do_not_query_localhost,
-      domain_insecure: new_resource.domain_insecure
+      domain_insecure: new_resource.domain_insecure,
+      verbosity: new_resource.verbosity
     )
     notifies :restart, 'service[unbound]', :delayed
   end
