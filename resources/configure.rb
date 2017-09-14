@@ -77,7 +77,9 @@ action :create do
       chroot: new_resource.chroot,
       logfile: new_resource.logfile,
       use_syslog: new_resource.use_syslog,
-      pid_file: new_resource.pid_file
+      pid_file: new_resource.pid_file,
+      do_not_query_localhost: new_resource.do_not_query_localhost,
+      domain_insecure: new_resource.domain_insecure
     )
     notifies :restart, 'service[unbound]', :delayed
   end
