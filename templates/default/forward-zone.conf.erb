@@ -15,13 +15,15 @@
 server:
 <% @forward_zone.each do |dex,rrset| -%>
   <% rrset.each do |rr| -%>
-    <% rr.each do |fqdn,frwd| -%>
+    <% rr.each do |fqdn,frwds| -%>
   forward-zone:
     name: "<%= fqdn %>."
-      <% if frwd =~ /\d+\.\d+\.\d+\.\d+/ %>
+      <% [*frwds].each do |frwd| -%>
+        <% if frwd =~ /\d+\.\d+\.\d+\.\d+/ %>
     forward-addr: "<%= frwd %>"
-      <% else %>
+        <% else %>
     forward-host: "<%= frwd %>"
+        <% end -%>
       <% end -%>
     <% end -%>
   <% end -%>
