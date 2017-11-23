@@ -3,7 +3,7 @@
 # a number of locally served zones can be configured.
 # 	local-zone: <zone> <type>
 # 	local-data: "<resource record string>"
-# o deny serves local data (if any), else, drops queries. 
+# o deny serves local data (if any), else, drops queries.
 # o refuse serves local data (if any), else, replies with error.
 # o static serves local data, else, nxdomain or nodata answer.
 # o transparent gives local data, but resolves normally for other names
@@ -13,7 +13,7 @@
 # defaults are localhost address, reverse for 127.0.0.1 and ::1
 # and nxdomain for AS112 zones. If you configure one of these zones
 # the default content is omitted, or you can omit it with 'nodefault'.
-# 
+#
 # If you configure local-data without specifying local-zone, by
 # default a transparent local-zone is created for the data.
 #
@@ -35,6 +35,7 @@
 # you need to do the reverse notation yourself.
 # local-data-ptr: "192.0.2.3 www.example.com"
 server:
+<% if @local_zone %>
   local-zone: "<%= @local_zone['id'].gsub(/_/, ".") %>." static
   <% @local_zone['ns'].each do |rr| -%>
     <% rr.each do |fqdn,ip| -%>
@@ -46,3 +47,4 @@ server:
   local-data: "<%= fqdn %>. 10800 IN A <%= ip %>"
     <% end -%>
   <% end -%>
+<% end %>
