@@ -1,4 +1,3 @@
-property :name, String, name_property: true
 property :local_zone, [Hash, Array]
 property :forward_zone, [Hash, Array]
 property :root_group, String, default: lazy {
