@@ -16,11 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-property :fqdn,     kind_of: String, name_attribute: true
-property :ip,       kind_of: String, required: true
-property :type,     kind_of: String, default: 'host'
-property :cwd,      kind_of: String
-property :exists,   kind_of: NilClass, default: nil
+property :fqdn,     String, name_property: true
+property :ip,       String, required: true
+property :type,     String, default: 'host'
+property :cwd,      String
+property :exists,   NilClass, default: nil
 
 action :add do
 end
