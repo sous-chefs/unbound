@@ -13,21 +13,21 @@ verifier:
   name: inspec
 
 platforms:
-- name: debian-8
-  driver:
-    image: dokken/debian-8
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
-- name: debian-9
-  driver:
-    image: dokken/debian-9
-    pid_one_command: /bin/systemd
-    intermediate_instructions:
-      - RUN /usr/bin/apt-get update
-
 # port conflict
+# - name: debian-8
+#   driver:
+#     image: dokken/debian-8
+#     pid_one_command: /bin/systemd
+#     intermediate_instructions:
+#       - RUN /usr/bin/apt-get update
+#
+# - name: debian-9
+#   driver:
+#     image: dokken/debian-9
+#     pid_one_command: /bin/systemd
+#     intermediate_instructions:
+#       - RUN /usr/bin/apt-get update
+# 
 # - name: centos-6
 #   driver:
 #     image: dokken/centos-6
