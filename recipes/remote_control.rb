@@ -24,7 +24,7 @@ node.default['unbound']['remote_control']['control_cert'] = File.join(node['unbo
 
 template "#{node['unbound']['directory']}/unbound.conf.d/remote-control.conf" do
   source 'remote-control.conf.erb'
-  mode 0644
+  mode '0644'
   owner 'root'
   group node['root_group']
   variables control: node['unbound']['remote_control']

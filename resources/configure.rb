@@ -46,7 +46,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf" do
     source 'unbound.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(
@@ -74,7 +74,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/stub-zone.conf" do
     source 'stub-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     notifies :restart, 'service[unbound]', :delayed
@@ -83,7 +83,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/local-zone.conf" do
     source 'local-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(local_zone: new_resource.local_zone)
@@ -93,7 +93,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/forward-zone.conf" do
     source 'forward-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(forward_zone: new_resource.forward_zone)
