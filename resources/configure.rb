@@ -102,10 +102,8 @@ action :create do
 
   service 'unbound' do
     case node['platform_family']
-    when %w(centos redhat scientific oracle freebsd amazon)
+    when %w(rhel freebsd amazon)
       supports status: true, restart: true, reload: true
-    when 'debian'
-      supports restart: true
     else
       supports restart: true
     end
