@@ -1,13 +1,6 @@
 property :local_zone, [Hash, Array]
 property :forward_zone, [Hash, Array]
-property :root_group, String, default: lazy {
-  case node['platform_family']
-  when 'freebsd'
-    'wheel'
-  else
-    'root'
-  end
-}
+property :root_group, String, default: lazy { node['root_group'] }
 property :dir, String, default: lazy {
   case node['platform_family']
   when 'freebsd'
