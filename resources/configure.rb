@@ -1,13 +1,6 @@
 property :local_zone, [Hash, Array]
 property :forward_zone, [Hash, Array]
-property :root_group, String, default: lazy {
-  case node['platform_family']
-  when 'freebsd'
-    'wheel'
-  else
-    'root'
-  end
-}
+property :root_group, String, default: lazy { node['root_group'] }
 property :dir, String, default: lazy {
   case node['platform_family']
   when 'freebsd'
@@ -53,7 +46,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf" do
     source 'unbound.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(
@@ -81,7 +74,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/stub-zone.conf" do
     source 'stub-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     notifies :restart, 'service[unbound]', :delayed
@@ -90,7 +83,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/local-zone.conf" do
     source 'local-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(local_zone: new_resource.local_zone)
@@ -100,7 +93,7 @@ action :create do
   template "#{new_resource.dir}/unbound.conf.d/forward-zone.conf" do
     source 'forward-zone.conf.erb'
     cookbook 'unbound'
-    mode 0644
+    mode '0644'
     owner 'root'
     group root_group
     variables(forward_zone: new_resource.forward_zone)
@@ -109,10 +102,8 @@ action :create do
 
   service 'unbound' do
     case node['platform_family']
-    when %w(centos redhat scientific oracle freebsd amazon)
+    when %w(rhel freebsd amazon)
       supports status: true, restart: true, reload: true
-    when 'debian'
-      supports restart: true
     else
       supports restart: true
     end

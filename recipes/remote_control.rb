@@ -17,11 +17,6 @@
 # limitations under the License.
 #
 
-root_group = value_for_platform(
-  'freebsd' => { 'default' => 'wheel' },
-  'default' => 'root'
-)
-
 node.default['unbound']['remote_control']['server_key'] = File.join(node['unbound']['directory'], 'unbound_server.key')
 node.default['unbound']['remote_control']['server_cert'] =  File.join(node['unbound']['directory'], 'unbound_server.pem')
 node.default['unbound']['remote_control']['control_key'] =  File.join(node['unbound']['directory'], 'unbound_control.key')
@@ -29,9 +24,9 @@ node.default['unbound']['remote_control']['control_cert'] = File.join(node['unbo
 
 template "#{node['unbound']['directory']}/unbound.conf.d/remote-control.conf" do
   source 'remote-control.conf.erb'
-  mode 0644
+  mode '0644'
   owner 'root'
-  group root_group
+  group node['root_group']
   variables control: node['unbound']['remote_control']
   notifies :restart, 'service[unbound]'
 end
