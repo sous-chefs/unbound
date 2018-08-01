@@ -7,7 +7,7 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '1.0.0'
 issues_url       'https://github.com/sous-chefs/unbound/issues'
 source_url       'https://github.com/sous-chefs/unbound'
-chef_version     '>= 12.5' if respond_to?(:chef_version)
+chef_version     '>= 12.7'
 
 %w( debian ubuntu centos redhat scientific oracle amazon ).each do |os|
   supports os
