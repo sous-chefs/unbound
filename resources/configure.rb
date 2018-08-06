@@ -43,12 +43,18 @@ property :bindir, String, default: lazy {
 }
 
 action :create do
+  directory "#{new_resource.dir}/unbound.conf.d" do
+    recursive true
+    owner 'root'
+    group new_resource.root_group
+  end
+
   template "#{new_resource.dir}/unbound.conf" do
     source 'unbound.conf.erb'
     cookbook 'unbound'
     mode '0644'
     owner 'root'
-    group root_group
+    group new_resource.root_group
     variables(
       interface: new_resource.interface,
       access_control: new_resource.access_control,
@@ -76,7 +82,7 @@ action :create do
     cookbook 'unbound'
     mode '0644'
     owner 'root'
-    group root_group
+    group new_resource.root_group
     notifies :restart, 'service[unbound]', :delayed
   end
 
@@ -85,7 +91,7 @@ action :create do
     cookbook 'unbound'
     mode '0644'
     owner 'root'
-    group root_group
+    group new_resource.root_group
     variables(local_zone: new_resource.local_zone)
     notifies :restart, 'service[unbound]', :delayed
   end
@@ -95,7 +101,7 @@ action :create do
     cookbook 'unbound'
     mode '0644'
     owner 'root'
-    group root_group
+    group new_resource.root_group
     variables(forward_zone: new_resource.forward_zone)
     notifies :restart, 'service[unbound]', :delayed
   end
