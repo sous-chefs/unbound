@@ -8,11 +8,17 @@ Installs and manages the unbound DNS server.
 
 ## Requirements
 
+### Platform
+
 A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported.
 
 * Ubuntu/Debian
 * Red Hat/CentOS/Fedora (requires EPEL)
 * FreeBSD
+
+### Chef
+
+- Chef 12.7+
 
 ## Resources
 
