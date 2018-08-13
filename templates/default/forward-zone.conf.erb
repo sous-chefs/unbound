@@ -21,6 +21,10 @@ server:
       <% [*frwds].each do |frwd| -%>
         <% if frwd =~ /\d+\.\d+\.\d+\.\d+/ %>
     forward-addr: "<%= frwd %>"
+        <% elsif frwd.is_a? Array %> 
+          <%= frwd.map {|f|
+            f =~ /\d+\.\d+\.\d+\.\d+/ ? "forward-addr: #{f}" : "forward-host: #{f}"
+            } %>
         <% else %>
     forward-host: "<%= frwd %>"
         <% end -%>

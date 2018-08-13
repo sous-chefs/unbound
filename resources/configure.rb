@@ -25,6 +25,7 @@ property :stats_interval, Integer, default: 0
 property :stats_cumulative, String, equal_to: %w(yes no), default: 'no'
 property :stats_extended, String, equal_to: %w(yes no), default: 'no'
 property :chroot, String
+property :remote_enable, String, equal_to: %w(yes no), default: 'no'
 property :pid_file, String, default: lazy {
   case node['platform']
   when 'freebsd'
@@ -59,6 +60,7 @@ action :create do
       interface: new_resource.interface,
       access_control: new_resource.access_control,
       stats_interval: new_resource.stats_interval,
+      remote_enable: new_resource.remote_enable,
       stats_cumulative: new_resource.stats_cumulative,
       stats_extended: new_resource.stats_extended,
       num_threads: new_resource.num_threads,

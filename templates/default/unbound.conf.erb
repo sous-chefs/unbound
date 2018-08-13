@@ -419,5 +419,8 @@ server:
 python:
   # Script file to load
   # python-script: "/etc/unbound/ubmodule-tst.py"
-
+<% if @remote_enable  == 'no' -%>
+remote-control:
+  control-enable: no
+<% end -%>
 include: "/etc/unbound/unbound.conf.d/*.conf"
