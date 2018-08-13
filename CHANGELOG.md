@@ -11,6 +11,7 @@ This file is used to list changes made in each version of the unbound cookbook.
 - Fix platform_family logic on the service Update platforms.
 - Use dokken images for travis testing.
 - Don't test on debian-8/9 and centos-6 as these services don't currently start.
+- Account for a list of forward-addrs / effectively disable remote control (#27)
 
 ## [1.0.0]
 
