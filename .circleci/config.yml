@@ -14,4 +14,5 @@ workflows:
       - kitchen/dokken:
           name: default-suite
           suite: default
+          platform: centos-7
           requires: [ danger, lint ]
