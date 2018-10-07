@@ -1,12 +1,11 @@
 driver:
   name: vagrant
 
-
 provisioner:
-  name: chef_zero
-
-client_rb:
-  treat_deprecation_warnings_as_errors: true
+  product_name: chef
+  product_version: <%= ENV['CHEF_VERSION'] || 'latest' %>
+  install_strategy: once
+  deprecations_as_errors: true
 
 verifier:
   name: inspec
@@ -19,23 +18,13 @@ platforms:
   # - name: debian-9
   # - name: centos-6
   - name: centos-7
-  - name: fedora-27
+  - name: fedora-latest
   - name: opensuse-leap
 
 suites:
   - name: default
     run_list:
       - 'recipe[test::default]'
-    attributes:
-      dns:
-        domain:
-          id: int_example_com
-          ns: [{ "int.example.com": "127.0.0.1" }]
-          host: [{ "www.int.example.com": "10.1.1.200" }]
-        forward_zone:
-          forward1: [{ "forward.example.com": "10.1.1.201" }]
-          forward2: [{ "forward2.example.com": ["10.1.1.202", "10.1.1.203"] }]
-          forward3: [{ "forward3.example.com": "ns1.none" }]
   - name: configure
     run_list:
       - 'recipe[test::configure]'
