@@ -32,6 +32,7 @@ action :install do
 
     cookbook_file '/etc/init.d/unbound' do
       source 'unbound.service'
+      cookbook 'unbound'
       owner 'root'
       group 'root'
       mode '0755'
