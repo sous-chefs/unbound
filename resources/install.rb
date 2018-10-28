@@ -44,4 +44,7 @@ action :install do
       action :upgrade
     end
   end
+  service 'unbound' do
+    action [:enable, :start]
+  end
 end
