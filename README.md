@@ -1,6 +1,7 @@
 # Unbound Cookbook
 
-[![Build Status](https://travis-ci.org/sous-chefs/unbound.svg?branch=master)](https://travis-ci.org/sous-chefs/unbound) [![Cookbook Version](https://img.shields.io/cookbook/v/unbound.svg)](https://supermarket.chef.io/cookbooks/unbound)
+[![Cookbook Version](https://img.shields.io/cookbook/v/unbound.svg)](https://supermarket.chef.io/cookbooks/unbound)
+[![Build Status](https://img.shields.io/circleci/project/github/sous-chefs/unbound/master.svg)](https://circleci.com/gh/sous-chefs/unbound)
 
 Installs and manages the unbound DNS server.
 
