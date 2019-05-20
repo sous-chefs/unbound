@@ -1,6 +1,11 @@
-# unbound Cookbook CHANGELOG
+# CHANGELOG
 
 This file is used to list changes made in each version of the unbound cookbook.
+
+## Unreleased
+
+- Upgraaded to circleci for testing
+- Minimum chef version is now 13
 
 ## [1.0.1]
 
