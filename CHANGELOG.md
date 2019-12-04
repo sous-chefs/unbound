@@ -4,8 +4,9 @@ This file is used to list changes made in each version of the unbound cookbook.
 
 ## Unreleased
 
-- Upgraaded to circleci for testing
-- Minimum chef version is now 13
+- Upgraded to circleci for testing
+- Minimum Chef Infra Client version is now 13.0
+- Removed unused long_description metadata.rb field
 
 ## [1.0.1]
 
