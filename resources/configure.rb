@@ -2,8 +2,7 @@ property :local_zone, [Hash, Array]
 property :forward_zone, [Hash, Array]
 property :root_group, String, default: lazy { node['root_group'] }
 property :dir, String, default: lazy {
-  case node['platform_family']
-  when 'freebsd'
+  if platform_family?('freebsd')
     '/usr/local/etc/unbound'
   else
     '/etc/unbound'
@@ -27,16 +26,14 @@ property :stats_extended, String, equal_to: %w(yes no), default: 'no'
 property :chroot, String
 property :remote_enable, String, equal_to: %w(yes no), default: 'no'
 property :pid_file, String, default: lazy {
-  case node['platform']
-  when 'freebsd'
+  if platform?('freebsd')
     '/usr/local/etc/unbound/unbound.pid'
   else
     '/var/run/unbound.pid'
   end
 }
 property :bindir, String, default: lazy {
-  case node['platform']
-  when 'freebsd'
+  if platform?('freebsd')
     '/usr/local/sbin'
   else
     '/usr/sbin'
@@ -109,8 +106,7 @@ action :create do
   end
 
   service 'unbound' do
-    case node['platform_family']
-    when %w(rhel freebsd amazon)
+    if platform_family?(%w(rhel freebsd amazon))
       supports status: true, restart: true, reload: true
     else
       supports restart: true
