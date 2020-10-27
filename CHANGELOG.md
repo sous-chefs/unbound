@@ -2,6 +2,11 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## Unreleased
+
+- updated tests folder to match other cookbooks
+- updated spec platform to supported version
+
 ## 2.0.0 - 2020-05-05
 
 - Upgraded to circleci for testing
