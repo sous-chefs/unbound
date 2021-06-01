@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
-## Unreleased
+## 2.0.1 - *2021-06-01*
 
 - Updated tests folder to match other cookbooks
 - Updated spec platform to supported version
