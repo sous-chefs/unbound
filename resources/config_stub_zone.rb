@@ -1,6 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: config
+# Resource:: config_stub_zone
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 #
 
 unified_mode true
-
-provides :unbound_configure
 
 include Unbound::Cookbook::Helpers
 
@@ -43,7 +41,7 @@ property :config_dir, String,
           description: 'Set to override unbound configuration directory.'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/unbound.conf" },
+          default: lazy { "#{config_dir}/stub-zone-#{name}.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
@@ -61,15 +59,38 @@ property :sensitive, [true, false],
           desired_state: false,
           description: 'Ensure that sensitive resource data is not output by Chef Infra Client.'
 
-property :config, Hash,
-          default: {},
-          coerce: proc { |p| p.to_h }
-
 property :sort, [true, false],
           default: true
 
 property :template_properties, Hash,
           default: {}
+
+property :zone_name, String,
+          default: lazy { name }
+
+property :stub_host, [String, Array],
+          coerce: proc { |p| p.to_a }
+
+property :stub_addr, [String, Array],
+          coerce: proc { |p| p.to_a }
+
+property :stub_prime, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
+
+property :stub_first, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
+
+property :stub_tls_upstream, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
+
+property :stub_ssl_upstream, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
+
+property :stub_tcp_upstream, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
+
+property :stub__no_cache, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
@@ -86,7 +107,21 @@ action_class do
     chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
     require 'deepsort'
 
-    config = new_resource.config
+    zone_config = {
+      'name' => new_resource.zone_name,
+      'stub-host' => new_resource.stub_host,
+      'stub-addr' => new_resource.stub_addr,
+      'stub-prime' => new_resource.stub_prime,
+      'stub-first' => new_resource.stub_first,
+      'stub-tls-upstream' => new_resource.stub_tls_upstream,
+      'stub-ssl-upstream' => new_resource.stub_ssl_upstream,
+      'stub-tcp-upstream' => new_resource.stub_tcp_upstream,
+      'stub-no-cache' => new_resource.stub_no_cache,
+    }.compact
+
+    config = {
+      'stub-zone' => zone_config,
+    }
     config.deep_sort! if new_resource.sort
 
     directory new_resource.config_dir do

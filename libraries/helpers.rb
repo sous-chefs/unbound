@@ -31,6 +31,17 @@ module Unbound
           '/etc/unbound/conf.d'
         end
       end
+
+      def unbound_yes_no?(value)
+        case value
+        when true
+          'yes'
+        when false
+          'no'
+        when 'yes', 'YES', 'no', 'NO'
+          value.downcase
+        end
+      end
     end
   end
 end

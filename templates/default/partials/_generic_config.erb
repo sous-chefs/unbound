@@ -9,14 +9,14 @@
 <% value.each do |val| %>
 <% if val.is_a?(Hash) %>
 <%= key %><% if @separator %><%= @separator %><% end %>
-<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: val, separator: ':' }), 1, 4) %>
+<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: val, separator: ':' }), 1, 2) %>
 <% else %>
 <%= key %><% if @separator %><%= @separator %><% end %> <%= val %>
 <% end %>
 <% end %>
 <% when Hash %>
 <%= key %><% if @separator %><%= @separator %><% end %>
-<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: value, separator: ':' }), 1, 4) %>
+<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: value, separator: ':' }), 1, 2) %>
 <% end %>
 <% end %>
 <% end %>

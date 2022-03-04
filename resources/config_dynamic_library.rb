@@ -1,6 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: config
+# Resource:: config_dynamic_library
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 #
 
 unified_mode true
-
-provides :unbound_configure
 
 include Unbound::Cookbook::Helpers
 
@@ -43,7 +41,7 @@ property :config_dir, String,
           description: 'Set to override unbound configuration directory.'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/unbound.conf" },
+          default: lazy { "#{config_dir}/dyn-lib-#{name}.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
@@ -61,15 +59,14 @@ property :sensitive, [true, false],
           desired_state: false,
           description: 'Ensure that sensitive resource data is not output by Chef Infra Client.'
 
-property :config, Hash,
-          default: {},
-          coerce: proc { |p| p.to_h }
-
 property :sort, [true, false],
           default: true
 
 property :template_properties, Hash,
           default: {}
+
+property :dynlib_file, [String, Array],
+          coerce: proc { |p| p.to_a }
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
@@ -86,7 +83,9 @@ action_class do
     chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
     require 'deepsort'
 
-    config = new_resource.config
+    config = {
+      'dynlib-file' => new_resource.dynlib_file,
+    }
     config.deep_sort! if new_resource.sort
 
     directory new_resource.config_dir do
