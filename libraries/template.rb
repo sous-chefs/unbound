@@ -1,8 +1,6 @@
 #
 # Cookbook:: unbound
-# Recipe:: default
-#
-# Copyright:: 2011, Joshua Timberman
+# Library:: template
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +15,12 @@
 # limitations under the License.
 #
 
-unbound_package 'unbound'
+module Unbound
+  module Cookbook
+    module TemplateHelpers
+      def template_partial_indent(output, level, spaces = 2)
+        output.split("\n").each { |l| l.prepend(' ' * (level * spaces)) }.join("\n")
+      end
+    end
+  end
+end

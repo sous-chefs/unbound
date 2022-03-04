@@ -2,8 +2,7 @@
 driver:
   name: dokken
   privileged: true
-  chef_version: current
-  env: [CHEF_LICENSE=accept]
+  chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 transport:
   name: dokken
@@ -11,22 +10,21 @@ transport:
 provisioner:
   name: dokken
 
-verifier:
-  name: inspec
-
 platforms:
   - name: centos-7
     driver:
       image: dokken/centos-7
-      platform: rhel
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: ubuntu-16.04
+  - name: centos-stream-8
     driver:
-      image: dokken/ubuntu-16.04
-      pid_one_command: /sbin/init
-      intermediate_instructions:
-        - RUN /usr/bin/apt-get update
+      image: dokken/centos-stream-8
+      pid_one_command: /usr/lib/systemd/systemd
+
+  - name: fedora-latest
+    driver:
+      image: dokken/fedora-latest
+      pid_one_command: /usr/lib/systemd/systemd
 
   - name: ubuntu-18.04
     driver:
@@ -35,7 +33,24 @@ platforms:
       intermediate_instructions:
         - RUN /usr/bin/apt-get update
 
-  - name: opensuse-leap
+  - name: ubuntu-20.04
     driver:
-      image: dokken/opensuse-leap
+      image: dokken/ubuntu-20.04
       pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: debian-10
+    driver:
+      image: dokken/debian-10
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+
+  - name: debian-11
+    driver:
+      image: dokken/debian-11
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN /usr/bin/apt-get update
+...

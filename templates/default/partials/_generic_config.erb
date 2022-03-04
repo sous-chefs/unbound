@@ -1,0 +1,22 @@
+<% unless @content.nil? -%>
+<% @content.each do |key, value| %>
+<% case value %>
+<% when nil %>
+<%= key %>
+<% when String, Numeric %>
+<%= key %><% if @separator %><%= @separator %><% end %> <%= value %>
+<% when Array %>
+<% value.each do |val| %>
+<% if val.is_a?(Hash) %>
+<%= key %><% if @separator %><%= @separator %><% end %>
+<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: val, separator: ':' }), 1, 4) %>
+<% else %>
+<%= key %><% if @separator %><%= @separator %><% end %> <%= val %>
+<% end %>
+<% end %>
+<% when Hash %>
+<%= key %><% if @separator %><%= @separator %><% end %>
+<%= template_partial_indent(render('partials/_generic_config.erb', cookbook: 'unbound', variables: { content: value, separator: ':' }), 1, 4) %>
+<% end %>
+<% end %>
+<% end %>

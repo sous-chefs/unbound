@@ -1,8 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: rr
-#
-# Copyright:: 2011, Joshua Timberman
+# Library:: helpers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +14,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-property :fqdn,     String, name_property: true
-property :ip,       String, required: true
-property :type,     String, default: 'host'
-property :cwd,      String
-property :exists,   NilClass, default: nil
 
-action :add do
+module Unbound
+  module Cookbook
+    module Helpers
+      def default_config_dir
+        return '/etc/unbound' if %i(unbound_config unbound_configure).include?(declared_type)
+        return '/etc/unbound.conf.d' if platform?('debian', 'ubuntu')
+
+        case declared_type
+        when :unbound_config_local
+          '/etc/unbound/local.d'
+        when :unbound_config_key
+          '/etc/unbound/keys.d'
+        else
+          '/etc/unbound/conf.d'
+        end
+      end
+    end
+  end
 end

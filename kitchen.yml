@@ -4,38 +4,33 @@ driver:
 
 provisioner:
   name: chef_zero
-
-client_rb:
-  treat_deprecation_warnings_as_errors: true
+  deprecations_as_errors: true
+  chef_license: accept
+  product_name: chef
+  product_version: <%= ENV['CHEF_VERSION'] || 'current' %>
+  install_strategy: always
+  log_level: <%= ENV['CHEF_LOG_LEVEL'] || 'auto' %>
 
 verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-  - name: ubuntu-18.04
-  # Port conflict issue
-  # - name: debian-8
-  # - name: debian-9
-  # - name: centos-6
   - name: centos-7
-  - name: fedora-27
-  - name: opensuse-leap
+  - name: centos-stream-8
+  - name: fedora-latest
+  - name: ubuntu-18.04
+  - name: ubuntu-20.04
+  - name: debian-10
+  - name: debian-11
 
 suites:
   - name: default
     run_list:
-      - 'recipe[test::default]'
-    attributes:
-      dns:
-        domain:
-          id: int_example_com
-          ns: [{"int.example.com": "127.0.0.1"}]
-          host: [{"www.int.example.com": "10.1.1.200"}]
-        forward_zone:
-          forward1: [{"forward.example.com": "10.1.1.201"}]
-          forward2: [{"forward2.example.com": ["10.1.1.202", "10.1.1.203"]}]
-          forward3: [{"forward3.example.com": "ns1.none"}]
-  - name: configure
-    run_list:
-      - 'recipe[test::configure]'
+      - recipe[test::default]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+  # - name: configure
+  #   run_list:
+  #     - recipe[test::configure]
+...
