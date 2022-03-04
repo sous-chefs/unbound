@@ -2,6 +2,8 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## Unreleased
+
 ## 2.0.3 - *2022-03-04*
 
 - resolved cookstyle error: .delivery/project.toml:2:8 convention: `Style/StringLiterals`
