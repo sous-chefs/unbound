@@ -32,7 +32,8 @@ property :include, [String, Array],
           coerce: proc { |p| p.to_a }
 
 property :server, Hash,
-          default: {}
+          default: {},
+          description: 'Server configuration as a Hash'
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
