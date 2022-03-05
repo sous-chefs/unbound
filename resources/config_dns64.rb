@@ -15,10 +15,12 @@
 # limitations under the License.
 #
 
+unified_mode true
+
 use 'partials/_config_file'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/dns64-#{name}.conf" },
+          default: lazy { "#{config_dir}/dns64.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
@@ -53,34 +55,12 @@ action_class do
     config = {
       'server' => dns64_config,
     }
-    config.deep_sort! if new_resource.sort
 
-    directory new_resource.config_dir do
-      owner new_resource.owner
-      group new_resource.group
-      mode new_resource.directory_mode
-
-      recursive true
-
-      action new_resource.action.eql?(:delete) ? :delete : :create
+    if new_resource.sort
+      deepsort?
+      config.deep_sort!
     end
 
-    template new_resource.config_file do
-      cookbook new_resource.cookbook
-      source new_resource.template
-
-      owner new_resource.owner
-      group new_resource.group
-      mode new_resource.mode
-      sensitive new_resource.sensitive
-
-      helpers(Unbound::Cookbook::TemplateHelpers)
-
-      variables(content: config)
-
-      action new_resource.action
-    end
+    perform_config_action
   end
 end
-
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }

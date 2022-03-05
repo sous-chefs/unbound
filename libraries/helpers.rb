@@ -32,6 +32,17 @@ module Unbound
         end
       end
 
+      def default_includes_dir
+        case node['platform_family']
+        when 'rhel', 'fedora'
+          %w(/etc/unbound/conf.d/*.conf /etc/unbound/local.d/*.conf)
+        when 'debian'
+          %w(/etc/unbound/unbound.conf.d/*.conf)
+        else
+          raise "Unsupported platform family #{node['platform_family']}"
+        end
+      end
+
       def unbound_yes_no?(value)
         case value
         when true
