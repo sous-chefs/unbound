@@ -55,9 +55,6 @@ end
 
 action_class do
   def do_template_action
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-    require 'deepsort'
-
     remote_control = {
       'control-enable' => new_resource.control_enable,
       'control-interface' => new_resource.control_interface,
@@ -73,11 +70,6 @@ action_class do
       'remote-control' => remote_control,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

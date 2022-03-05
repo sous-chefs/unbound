@@ -51,9 +51,6 @@ end
 
 action_class do
   def do_template_action
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-    require 'deepsort'
-
     zone_config = {
       'name' => new_resource.zone_name,
       'local-zone' => new_resource.local_zone,
@@ -66,11 +63,6 @@ action_class do
       'view' => zone_config,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

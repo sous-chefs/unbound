@@ -43,9 +43,6 @@ end
 
 action_class do
   def do_template_action
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-    require 'deepsort'
-
     dns64_config = {
       'dns64-prefix' => new_resource.dns64_prefix,
       'dns64-synthall' => new_resource.dns64_synthall,
@@ -56,11 +53,6 @@ action_class do
       'server' => dns64_config,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

@@ -40,18 +40,10 @@ end
 
 action_class do
   def do_template_action
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-    require 'deepsort'
-
     config = {
       'python-script' => new_resource.python_script,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

@@ -49,9 +49,6 @@ end
 
 action_class do
   def do_template_action
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-    require 'deepsort'
-
     cachedb_config = {
       'backend' => new_resource.backend,
       'secret-seed' => new_resource.secret_seed,
@@ -65,11 +62,6 @@ action_class do
       'cachedb' => cachedb_config,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

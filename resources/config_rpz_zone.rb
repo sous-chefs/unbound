@@ -93,11 +93,6 @@ action_class do
       'rpz' => zone_config,
     }
 
-    if new_resource.sort
-      deepsort?
-      config.deep_sort!
-    end
-
-    perform_config_action
+    perform_config_action(config)
   end
 end

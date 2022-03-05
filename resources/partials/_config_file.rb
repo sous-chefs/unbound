@@ -67,9 +67,13 @@ property :template_properties, Hash,
 
 action_class do
   def deepsort?
-    chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
-
     return if defined?(DeepSort)
+
+    begin
+      Gem::Specification.find_by_name('deepsort')
+    rescue Gem::MissingSpecError
+      declare_resource(:chef_gem, 'deepsort')
+    end
 
     require 'deepsort'
 
@@ -85,6 +89,11 @@ action_class do
       recursive true
 
       action new_resource.action.eql?(:delete) ? :delete : :create
+    end
+
+    if new_resource.sort
+      deepsort?
+      config.deep_sort!
     end
 
     template new_resource.config_file do
