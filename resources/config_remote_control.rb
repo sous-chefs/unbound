@@ -1,6 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: config
+# Resource:: config_remote_control
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,61 +15,31 @@
 # limitations under the License.
 #
 
-unified_mode true
-
-provides :unbound_configure
-
-include Unbound::Cookbook::Helpers
-
-property :owner, String,
-          default: 'root',
-          description: 'Set to override config file owner. Defaults to root.'
-
-property :group, String,
-          default: 'unbound',
-          description: 'Set to override config file group. Defaults to unbound.'
-
-property :mode, String,
-          default: '0640',
-          description: 'Set to override config file mode. Defaults to 0640.'
-
-property :directory_mode, String,
-          default: '0750',
-          description: 'Set to override config directory mode. Defaults to 0750.'
-
-property :config_dir, String,
-          default: lazy { default_config_dir },
-          desired_state: false,
-          description: 'Set to override unbound configuration directory.'
+use 'partials/_config_file'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/unbound.conf" },
+          default: lazy { "#{config_dir}/remote-control-#{name}.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
-property :cookbook, String,
-          default: 'unbound',
-          desired_state: false,
-          description: 'Template source cookbook for the unbound configuration file.'
+property :control_enable, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
 
-property :template, String,
-          default: 'unbound.conf.erb',
-          desired_state: false,
-          description: 'Template source file for the unbound configuration file.'
+property :control_interface, [String, Array],
+          coerce: proc { |p| p.to_a }
 
-property :sensitive, [true, false],
-          desired_state: false,
-          description: 'Ensure that sensitive resource data is not output by Chef Infra Client.'
+property :control_port, Integer
 
-property :config, Hash,
-          default: {},
-          coerce: proc { |p| p.to_h }
+property :control_use_cert, [String, true, false],
+          coerce: proc { |p| unbound_yes_no?(p) }
 
-property :sort, [true, false],
-          default: true
+property :control_key_file, String
 
-property :template_properties, Hash,
-          default: {}
+property :control_cert_file, String
+
+property :server, String
+
+property :server_cert_file, String
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
@@ -86,7 +56,20 @@ action_class do
     chef_gem('deepsort') { compile_time true } if Gem::Specification.find_by_name('deepsort').nil?
     require 'deepsort'
 
-    config = new_resource.config
+    remote_control = {
+      'control-enable' => new_resource.control_enable,
+      'control-interface' => new_resource.control_interface,
+      'control-port' => new_resource.control_port,
+      'control-use-cert' => new_resource.control_use_cert,
+      'control-key-file' => new_resource.control_key_file,
+      'control-cert-file' => new_resource.control_cert_file,
+      'server-key-file' => new_resource.server_key_file,
+      'server-cert-file' => new_resource.server_cert_file,
+    }.compact
+
+    config = {
+      'remote-control' => remote_control,
+    }
     config.deep_sort! if new_resource.sort
 
     directory new_resource.config_dir do
@@ -110,7 +93,7 @@ action_class do
 
       helpers(Unbound::Cookbook::TemplateHelpers)
 
-      variables(content: config, separator: ':')
+      variables(content: config)
 
       action new_resource.action
     end

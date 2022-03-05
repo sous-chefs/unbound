@@ -27,10 +27,8 @@ suites:
   - name: default
     run_list:
       - recipe[test::default]
+      - recipe[test::config]
     verifier:
       inspec_tests:
         - test/integration/default
-  # - name: configure
-  #   run_list:
-  #     - recipe[test::configure]
 ...

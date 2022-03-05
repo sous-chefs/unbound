@@ -1,6 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: config_python_script
+# Resource:: config
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,16 +15,21 @@
 # limitations under the License.
 #
 
+provides :unbound_configure
+provides :unbound_config
+
 use 'partials/_config_file'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/python-script-#{name}.conf" },
+          default: lazy { "#{config_dir}/unbound.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
-property :python_script, [String, Array],
-          coerce: proc { |p| p.to_a },
-          required: true
+property :include, [String, Array],
+          coerce: proc { |p| p.to_a }
+
+property :server, Hash,
+          default: {}
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
@@ -42,8 +47,9 @@ action_class do
     require 'deepsort'
 
     config = {
-      'python-script' => new_resource.python_script,
-    }
+      'include' => new_resource.include,
+      'server' => new_resource.server,
+    }.compact
     config.deep_sort! if new_resource.sort
 
     directory new_resource.config_dir do
