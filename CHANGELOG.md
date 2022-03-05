@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the unbound cookbook.
 
 ## Unreleased
 
+- Add separate configuration resources
+- Default recipe only run installation
+- Refactor configuration template to be Hash driven
+
 ## 2.0.3 - *2022-03-04*
 
 - resolved cookstyle error: .delivery/project.toml:2:8 convention: `Style/StringLiterals`
