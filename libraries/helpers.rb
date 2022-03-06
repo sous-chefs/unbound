@@ -20,7 +20,8 @@ module Unbound
     module Helpers
       def default_config_dir
         return '/etc/unbound' if %i(unbound_config unbound_configure).include?(declared_type)
-        return '/etc/unbound.conf.d' if platform?('debian', 'ubuntu')
+
+        return '/etc/unbound/unbound.conf.d' if platform?('debian', 'ubuntu')
 
         case declared_type
         when :unbound_config_local
