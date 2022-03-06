@@ -41,6 +41,8 @@ property :control_cert_file, String
 
 property :server, String
 
+property :server_key_file, String
+
 property :server_cert_file, String
 
 load_current_value do |new_resource|
