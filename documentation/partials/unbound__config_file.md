@@ -23,6 +23,7 @@
 | `sensitive`           |       | true, false |         | Ensure that sensitive resource data is not output by Chef Infra Client. |                |
 | `sort`                |       | true, false |         |                                                                         |                |
 | `template_properties` |       | Hash        |         |                                                                         |                |
+| `extra_options`       |       | Hash        |         |                                                                         |                |
 
 ## Libraries
 

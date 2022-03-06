@@ -65,6 +65,9 @@ property :sort, [true, false],
 property :template_properties, Hash,
           default: {}
 
+property :extra_options, Hash,
+          default: {}
+
 action_class do
   def deepsort?
     return if defined?(DeepSort)
@@ -90,6 +93,8 @@ action_class do
 
       action new_resource.action.eql?(:delete) ? :delete : :create
     end
+
+    config.merge!(new_resource.extra_options) unless new_resource.extra_options.empty?
 
     if new_resource.sort
       deepsort?
