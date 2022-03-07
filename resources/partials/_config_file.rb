@@ -41,7 +41,7 @@ property :config_dir, String,
           description: 'Set to override unbound configuration directory.'
 
 property :config_file, String,
-          default: lazy { "#{config_dir}/unbound.conf" },
+          default: lazy { "#{config_dir}/#{name}.conf" },
           desired_state: false,
           description: 'Set to override unbound configuration file.'
 
