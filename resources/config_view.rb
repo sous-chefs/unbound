@@ -28,13 +28,13 @@ property :zone_name, String,
           default: lazy { name }
 
 property :local_zone, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :local_data, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :local_data_ptr, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :view_first, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
@@ -53,9 +53,9 @@ action_class do
   def do_template_action
     zone_config = {
       'name' => new_resource.zone_name,
-      'local-zone' => new_resource.local_zone,
-      'local-data' => new_resource.local_data,
-      'local-data-ptr' => new_resource.local_data_ptr,
+      'local-zone' => new_resource.local_zone.dup,
+      'local-data' => new_resource.local_data.dup,
+      'local-data-ptr' => new_resource.local_data_ptr.dup,
       'view-first' => new_resource.view_first,
     }.compact
 

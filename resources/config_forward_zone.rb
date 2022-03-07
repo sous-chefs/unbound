@@ -28,10 +28,10 @@ property :zone_name, String,
           default: lazy { name }
 
 property :forward_host, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :forward_addr, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :forward_first, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
@@ -62,8 +62,8 @@ action_class do
   def do_template_action
     zone_config = {
       'name' => new_resource.zone_name,
-      'forward-host' => new_resource.forward_host,
-      'forward-addr' => new_resource.forward_addr,
+      'forward-host' => new_resource.forward_host.dup,
+      'forward-addr' => new_resource.forward_addr.dup,
       'forward-first' => new_resource.forward_first,
       'forward-tls-upstream' => new_resource.forward_tls_upstream,
       'forward-ssl-upstream' => new_resource.forward_ssl_upstream,

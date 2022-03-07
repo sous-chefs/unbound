@@ -29,7 +29,7 @@ property :config_file, String,
 
 property :include, [String, Array],
           default: lazy { default_includes_dir },
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :server, Hash,
           default: {},
@@ -48,8 +48,8 @@ end
 action_class do
   def do_template_action
     config = {
-      'include' => new_resource.include,
-      'server' => new_resource.server,
+      'include' => new_resource.include.dup,
+      'server' => new_resource.server.dup,
     }.compact
 
     perform_config_action(config)

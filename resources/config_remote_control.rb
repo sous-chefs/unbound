@@ -28,7 +28,7 @@ property :control_enable, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
 
 property :control_interface, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :control_port, Integer
 
@@ -59,7 +59,7 @@ action_class do
   def do_template_action
     remote_control = {
       'control-enable' => new_resource.control_enable,
-      'control-interface' => new_resource.control_interface,
+      'control-interface' => new_resource.control_interface.dup,
       'control-port' => new_resource.control_port,
       'control-use-cert' => new_resource.control_use_cert,
       'control-key-file' => new_resource.control_key_file,

@@ -25,7 +25,7 @@ property :config_file, String,
           description: 'Set to override unbound configuration file.'
 
 property :dynlib_file, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 load_current_value do |new_resource|
   current_value_does_not_exist! unless ::File.exist?(new_resource.config_file)
@@ -40,7 +40,7 @@ end
 action_class do
   def do_template_action
     config = {
-      'dynlib-file' => new_resource.dynlib_file,
+      'dynlib-file' => new_resource.dynlib_file.dup,
     }
 
     perform_config_action(config)

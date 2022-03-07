@@ -94,7 +94,7 @@ action_class do
       action new_resource.action.eql?(:delete) ? :delete : :create
     end
 
-    config.merge!(new_resource.extra_options) unless new_resource.extra_options.empty?
+    config.merge!(new_resource.extra_options.dup) unless new_resource.extra_options.empty?
 
     if new_resource.sort
       deepsort?

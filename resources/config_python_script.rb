@@ -25,7 +25,7 @@ property :config_file, String,
           description: 'Set to override unbound configuration file.'
 
 property :python_script, [String, Array],
-          coerce: proc { |p| p.to_a },
+          coerce: proc { |p| Array(p) },
           required: true
 
 load_current_value do |new_resource|
@@ -41,7 +41,7 @@ end
 action_class do
   def do_template_action
     config = {
-      'python-script' => new_resource.python_script,
+      'python-script' => new_resource.python_script.dup,
     }
 
     perform_config_action(config)

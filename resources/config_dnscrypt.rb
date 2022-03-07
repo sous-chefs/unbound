@@ -30,7 +30,7 @@ property :dnscrypt_enable, [String, true, false],
 property :dnscrypt_port, Integer
 
 property :dnscrypt_provider, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :dnscrypt_secret_key, String
 
@@ -61,7 +61,7 @@ action_class do
     dnscrypt_config = {
       'dnscrypt-enable' => new_resource.dnscrypt_enable,
       'dnscrypt-port' => new_resource.dnscrypt_port,
-      'dnscrypt-provider' => new_resource.dnscrypt_provider,
+      'dnscrypt-provider' => new_resource.dnscrypt_provider.dup,
       'dnscrypt-secret-key' => new_resource.dnscrypt_secret_key,
       'dnscrypt-provider-cert' => new_resource.dnscrypt_provider_cert,
       'dnscrypt-provider-cert-rotated' => new_resource.dnscrypt_provider_cert_rotated,

@@ -28,10 +28,10 @@ property :zone_name, String,
           default: lazy { name }
 
 property :stub_host, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :stub_addr, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :stub_prime, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
@@ -48,7 +48,7 @@ property :stub_ssl_upstream, [String, true, false],
 property :stub_tcp_upstream, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
 
-property :stub__no_cache, [String, true, false],
+property :stub_no_cache, [String, true, false],
           coerce: proc { |p| unbound_yes_no?(p) }
 
 load_current_value do |new_resource|
@@ -65,8 +65,8 @@ action_class do
   def do_template_action
     zone_config = {
       'name' => new_resource.zone_name,
-      'stub-host' => new_resource.stub_host,
-      'stub-addr' => new_resource.stub_addr,
+      'stub-host' => new_resource.stub_host.dup,
+      'stub-addr' => new_resource.stub_addr.dup,
       'stub-prime' => new_resource.stub_prime,
       'stub-first' => new_resource.stub_first,
       'stub-tls-upstream' => new_resource.stub_tls_upstream,

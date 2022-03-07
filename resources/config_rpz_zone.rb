@@ -28,16 +28,16 @@ property :zone_name, String,
           default: lazy { name }
 
 property :primary, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :master, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :url, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :allow_notify, [String, Array],
-          coerce: proc { |p| p.to_a }
+          coerce: proc { |p| Array(p) }
 
 property :zonefile, String
 
@@ -75,10 +75,10 @@ action_class do
   def do_template_action
     zone_config = {
       'name' => new_resource.zone_name,
-      'primary' => new_resource.primary,
-      'master' => new_resource.master,
-      'url' => new_resource.url,
-      'allow-notify' => new_resource.allow_notify,
+      'primary' => new_resource.primary.dup,
+      'master' => new_resource.master.dup,
+      'url' => new_resource.url.dup,
+      'allow-notify' => new_resource.allow_notify.dup,
       'zonefile' => new_resource.zonefile,
       'rpz-action-override' => new_resource.rpz_action_override,
       'rpz-cname-override' => new_resource.rpz_cname_override,
@@ -86,7 +86,7 @@ action_class do
       'rpz-log-name' => new_resource.rpz_log_name,
       'rpz-signal-nxfomain-ra' => new_resource.rpz_signal_nxdomain_ra,
       'for-downstream' => new_resource.for_downstream,
-      'tags' => new_resource.tags,
+      'tags' => new_resource.tags.dup,
     }.compact
 
     config = {
