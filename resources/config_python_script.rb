@@ -41,7 +41,9 @@ end
 action_class do
   def do_template_action
     config = {
-      'python-script' => new_resource.python_script.dup,
+      'python' => {
+        'python-script' => new_resource.python_script.dup,
+      },
     }
 
     perform_config_action(config)
