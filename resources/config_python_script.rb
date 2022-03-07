@@ -40,6 +40,8 @@ end
 
 action_class do
   def do_template_action
+    declare_resource(:package, 'python3-unbound')
+
     config = {
       'python' => {
         'python-script' => new_resource.python_script.dup,
