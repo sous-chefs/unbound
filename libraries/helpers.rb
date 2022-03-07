@@ -19,7 +19,7 @@ module Unbound
   module Cookbook
     module Helpers
       def default_config_dir
-        return '/etc/unbound' if %i(unbound_config unbound_configure).include?(declared_type)
+        return '/etc/unbound' if %i(unbound_config unbound_configure unbound_config_server).include?(declared_type)
 
         return '/etc/unbound/unbound.conf.d' if platform?('debian', 'ubuntu')
 

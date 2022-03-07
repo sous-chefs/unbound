@@ -1,6 +1,6 @@
 #
 # Cookbook:: unbound
-# Resource:: config
+# Resource:: config_server
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 
 unified_mode true
 
+provides :unbound_config_server
 provides :unbound_configure
 provides :unbound_config
 
