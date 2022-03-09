@@ -17,4 +17,9 @@
 # limitations under the License.
 #
 
+log 'v3_warning' do
+  message 'Version 3.0.0 of this cookbook removed all configuration actions from the default recipe'
+  level :warn
+end
+
 unbound_package 'unbound'
