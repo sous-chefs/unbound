@@ -5,7 +5,7 @@ This file is used to list changes made in each version of the unbound cookbook.
 ## Unreleased
 
 - Add separate configuration resources
-- Default recipe only run installation
+- Default recipe now only runs installation
 - Refactor configuration template to be Hash driven
 
 ## 2.0.3 - *2022-03-04*
