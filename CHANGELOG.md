@@ -4,6 +4,10 @@ This file is used to list changes made in each version of the unbound cookbook.
 
 ## Unreleased
 
+- Add separate configuration resources
+- Default recipe now only runs installation
+- Refactor configuration template to be Hash driven
+
 ## 2.0.3 - *2022-03-04*
 
 - resolved cookstyle error: .delivery/project.toml:2:8 convention: `Style/StringLiterals`
@@ -13,6 +17,7 @@ This file is used to list changes made in each version of the unbound cookbook.
 - resolved cookstyle error: .delivery/project.toml:7:9 convention: `Style/StringLiterals`
 - resolved cookstyle error: .delivery/project.toml:8:14 convention: `Style/StringLiterals`
 - resolved cookstyle error: .delivery/project.toml:9:11 convention: `Style/StringLiterals`
+
 ## 2.0.2 - *2021-08-31*
 
 - Standardise files with files in sous-chefs/repo-management

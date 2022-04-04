@@ -6,8 +6,8 @@ description      'Manages unbound DNS resolver'
 version          '2.0.3'
 issues_url       'https://github.com/sous-chefs/unbound/issues'
 source_url       'https://github.com/sous-chefs/unbound'
-chef_version     '>= 13'
+chef_version     '>= 16'
 
-%w( debian ubuntu centos redhat scientific oracle amazon ).each do |os|
+%w(debian ubuntu centos redhat scientific oracle amazon).each do |os|
   supports os
 end

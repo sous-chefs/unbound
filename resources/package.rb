@@ -1,8 +1,6 @@
 #
 # Cookbook:: unbound
-# Recipe:: default
-#
-# Copyright:: 2011, Joshua Timberman
+# Resource:: package
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,9 +15,22 @@
 # limitations under the License.
 #
 
-log 'v3_warning' do
-  message 'Version 3.0.0 of this cookbook removed all configuration actions from the default recipe'
-  level :warn
+unified_mode true
+
+provides :unbound_install
+
+property :packages, [String, Array],
+          coerce: proc { |p| p.is_a?(Array) ? p : [ p ] },
+          default: %w(unbound),
+          description: 'Unbound packages to install.'
+
+action_class do
+  def do_package_action(action)
+    package 'unbound' do
+      package_name new_resource.packages
+      action action
+    end
+  end
 end
 
-unbound_package 'unbound'
+%i(install upgrade remove).each { |pkg_action| action(pkg_action) { do_package_action(action) } }
