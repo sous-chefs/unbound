@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
-## Unreleased
+## 3.0.0 - *2022-04-04*
 
 - Add separate configuration resources
 - Default recipe now only runs installation
