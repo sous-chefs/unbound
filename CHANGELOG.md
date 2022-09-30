@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
-## Unreleased
+## 3.0.1 - *2022-09-30*
 
 - Add missing `fallback-enable` setting to `config_authority_zone`
 
