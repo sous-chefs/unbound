@@ -76,6 +76,7 @@ action_class do
       'master' => new_resource.master.dup,
       'url' => new_resource.url.dup,
       'allow-notify' => new_resource.allow_notify.dup,
+      'fallback-enabled' => new_resource.fallback_enabled,
       'for-downstream' => new_resource.for_downstream,
       'for-upstream' => new_resource.for_upstream,
       'zonemd-check' => new_resource.zonemd_check,
