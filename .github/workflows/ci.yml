@@ -9,7 +9,7 @@ name: ci
 
 jobs:
   lint-unit:
-    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@0.0.3
+    uses: sous-chefs/.github/.github/workflows/lint-unit.yml@2.0.6
 
   integration:
     needs: lint-unit
@@ -17,20 +17,20 @@ jobs:
     strategy:
       matrix:
         os:
-          - 'centos-7'
-          - 'centos-stream-8'
-          - 'fedora-latest'
-          - 'ubuntu-1804'
-          - 'ubuntu-2004'
-          - 'debian-10'
-          - 'debian-11'
+          - "centos-7"
+          - "centos-stream-8"
+          - "fedora-latest"
+          - "ubuntu-1804"
+          - "ubuntu-2004"
+          - "debian-10"
+          - "debian-11"
         suite:
-          - 'default'
+          - "default"
       fail-fast: false
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Install Chef
         uses: actionshub/chef-install@main
       - name: Dokken
