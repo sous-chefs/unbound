@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
-## Unreleased
+## 3.0.2 - *2023-10-02*
 
 - Update Ci files and remove CircleCI config
 
