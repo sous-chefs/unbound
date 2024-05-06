@@ -2,7 +2,7 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
-## Unreleased
+## 3.0.3 - *2024-05-06*
 
 ## 3.0.2 - *2023-10-02*
 
