@@ -43,7 +43,7 @@ property :zonefile, String
 
 property :rpz_action_override, [String, Symbol],
           equal_to: %w(nxdomain nodata passthru drop disabled cname),
-          coerce: proc { |p| p.to_s }
+          coerce: proc(&:to_s)
 
 property :rpz_cname_override, String
 
