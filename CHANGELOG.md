@@ -2,6 +2,13 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## [3.0.6](https://github.com/sous-chefs/unbound/compare/3.0.5...v3.0.6) (2025-10-16)
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#94](https://github.com/sous-chefs/unbound/issues/94)) ([ed73baf](https://github.com/sous-chefs/unbound/commit/ed73bafa080466835683a3a8a3f57998f048d655))
+
 ## 3.0.2 - *2023-10-02*
 
 * Update Ci files and remove CircleCI config
