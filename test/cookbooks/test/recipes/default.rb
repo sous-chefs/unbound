@@ -12,8 +12,7 @@ if platform_family?('rhel', 'fedora')
     'chroot' => '',
     'username' => 'unbound',
     'directory' => '/etc/unbound',
-    'pidfile' => '/var/run/unbound/unbound.pid',
-    'auto-trust-anchor-file' => '/var/lib/unbound/root.key'
+    'pidfile' => '/var/run/unbound/unbound.pid'
   )
 end
 
