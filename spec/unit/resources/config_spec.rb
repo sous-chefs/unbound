@@ -48,7 +48,7 @@ describe 'unbound_config with mixed string and symbol keys' do
     end
   end
 
-  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('chroot:') }
+  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('chroot: ""') }
   it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('interface: 127.0.0.1') }
   it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('pidfile: /var/run/unbound/unbound.pid') }
   it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('verbosity: 1') }

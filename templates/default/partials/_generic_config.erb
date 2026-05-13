@@ -3,7 +3,9 @@
 <% case value %>
 <% when nil %>
 <%= key %>
-<% when String, Numeric %>
+<% when String %>
+<%= key %><% if @separator %><%= @separator %><% end %> <%= value.empty? ? '""' : value %>
+<% when Numeric %>
 <%= key %><% if @separator %><%= @separator %><% end %> <%= value %>
 <% when Array %>
 <% value.each do |val| %>
