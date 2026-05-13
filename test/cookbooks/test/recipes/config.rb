@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 unbound_config 'unbound' do
   server({
            verbosity: 1,

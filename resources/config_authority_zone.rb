@@ -15,8 +15,11 @@
 # limitations under the License.
 #
 
+# frozen_string_literal: true
+
 unified_mode true
 
+provides :unbound_config_authority_zone
 provides :unbound_config_auth_zone
 
 use 'partials/_config_file'

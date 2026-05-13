@@ -1,0 +1,7 @@
+---
+name: default
+title: Unbound Default Tests
+maintainer: Sous Chefs
+license: Apache-2.0
+summary: Verify Unbound package, configuration, and service resources
+version: 1.0.0

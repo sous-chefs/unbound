@@ -1,13 +1,20 @@
+# frozen_string_literal: true
+
 name             'unbound'
 maintainer       'Sous Chefs'
 maintainer_email 'help@sous-chefs.org'
 license          'Apache-2.0'
-description      'Manages unbound DNS resolver'
+description      'Provides custom resources to install, configure, and manage Unbound DNS resolver'
 version          '3.0.6'
 issues_url       'https://github.com/sous-chefs/unbound/issues'
 source_url       'https://github.com/sous-chefs/unbound'
 chef_version     '>= 16'
 
-%w(debian ubuntu centos redhat scientific oracle amazon).each do |os|
-  supports os
-end
+supports 'almalinux', '>= 8.0'
+supports 'centos_stream', '>= 9.0'
+supports 'debian', '>= 12.0'
+supports 'fedora'
+supports 'oracle', '>= 8.0'
+supports 'redhat', '>= 8.0'
+supports 'rocky', '>= 8.0'
+supports 'ubuntu', '>= 22.04'

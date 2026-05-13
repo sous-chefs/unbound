@@ -15,7 +15,11 @@
 # limitations under the License.
 #
 
+# frozen_string_literal: true
+
 unified_mode true
+
+provides :unbound_service
 
 property :service_name, String,
           default: 'unbound',

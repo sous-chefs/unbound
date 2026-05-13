@@ -15,8 +15,11 @@
 # limitations under the License.
 #
 
+# frozen_string_literal: true
+
 unified_mode true
 
+provides :unbound_package
 provides :unbound_install
 
 property :packages, [String, Array],
