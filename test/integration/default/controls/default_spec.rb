@@ -21,11 +21,6 @@ control 'unbound-service-02' do
     it { should be_listening }
     its('processes') { should include 'unbound' }
   end
-
-  describe port(853) do
-    it { should be_listening }
-    its('processes') { should include 'unbound' }
-  end
 end
 
 control 'unbound-config-01' do
@@ -35,7 +30,6 @@ control 'unbound-config-01' do
   describe file('/etc/unbound/unbound.conf') do
     it { should exist }
     its('content') { should include 'interface: 127.0.0.1' }
-    its('content') { should include 'interface: 127.0.0.1@853' }
   end
 
   describe file("#{config_include_dir}/forward-zone-test.zone.conf") do

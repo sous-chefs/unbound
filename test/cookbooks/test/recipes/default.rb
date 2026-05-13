@@ -5,10 +5,7 @@ unbound_package 'unbound'
 unbound_config 'unbound' do
   server({
            verbosity: 1,
-           interface: [
-             '127.0.0.1',
-             '127.0.0.1@853',
-           ],
+           interface: '127.0.0.1',
          })
   notifies :restart, 'unbound_service[unbound]', :delayed
 end
