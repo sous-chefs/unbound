@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+config_include_dir = os.family == 'debian' ? '/etc/unbound/unbound.conf.d' : '/etc/unbound/conf.d'
+
 control 'unbound-service-01' do
   impact 1.0
   title 'Unbound service is installed, enabled, and running'
@@ -36,7 +38,7 @@ control 'unbound-config-01' do
     its('content') { should include 'interface: 127.0.0.1@853' }
   end
 
-  describe file('/etc/unbound/unbound.conf.d/forward-zone-test.zone.conf') do
+  describe file("#{config_include_dir}/forward-zone-test.zone.conf") do
     it { should exist }
     its('content') { should include 'forward-addr: 1.1.1.1' }
     its('content') { should include 'forward-addr: 8.8.8.8' }

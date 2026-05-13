@@ -13,6 +13,23 @@ describe 'unbound_config' do
   end
 
   it { is_expected.to create_directory('/etc/unbound') }
+  it { is_expected.to create_directory('/etc/unbound/unbound.conf.d') }
+  it { is_expected.to create_template('/etc/unbound/unbound.conf') }
+end
+
+describe 'unbound_config on RHEL-family platforms' do
+  step_into :unbound_config
+  platform 'redhat', '9'
+
+  recipe do
+    unbound_config 'unbound' do
+      server verbosity: 1
+    end
+  end
+
+  it { is_expected.to create_directory('/etc/unbound') }
+  it { is_expected.to create_directory('/etc/unbound/conf.d') }
+  it { is_expected.to create_directory('/etc/unbound/local.d') }
   it { is_expected.to create_template('/etc/unbound/unbound.conf') }
 end
 
