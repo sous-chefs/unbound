@@ -10,6 +10,8 @@ issues_url       'https://github.com/sous-chefs/unbound/issues'
 source_url       'https://github.com/sous-chefs/unbound'
 chef_version     '>= 16'
 
+gem 'deepsort'
+
 supports 'almalinux', '>= 8.0'
 supports 'centos_stream', '>= 9.0'
 supports 'debian', '>= 12.0'
