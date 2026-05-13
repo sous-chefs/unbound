@@ -33,6 +33,27 @@ describe 'unbound_config on RHEL-family platforms' do
   it { is_expected.to create_template('/etc/unbound/unbound.conf') }
 end
 
+describe 'unbound_config with mixed string and symbol keys' do
+  step_into :unbound_config
+  platform 'redhat', '9'
+
+  recipe do
+    unbound_config 'unbound' do
+      server(
+        verbosity: 1,
+        interface: '127.0.0.1',
+        'chroot' => '',
+        'pidfile' => '/var/run/unbound/unbound.pid'
+      )
+    end
+  end
+
+  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('chroot:') }
+  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('interface: 127.0.0.1') }
+  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('pidfile: /var/run/unbound/unbound.pid') }
+  it { is_expected.to render_file('/etc/unbound/unbound.conf').with_content('verbosity: 1') }
+end
+
 describe 'unbound_config_authority_zone' do
   step_into :unbound_config_authority_zone
   platform 'ubuntu', '24.04'
