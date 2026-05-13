@@ -2,11 +2,23 @@
 
 unbound_package 'unbound'
 
+server_config = {
+  verbosity: 1,
+  interface: '127.0.0.1',
+}
+
+if platform_family?('rhel', 'fedora')
+  server_config.merge!(
+    'chroot' => '',
+    'username' => 'unbound',
+    'directory' => '/etc/unbound',
+    'pidfile' => '/var/run/unbound/unbound.pid',
+    'auto-trust-anchor-file' => '/var/lib/unbound/root.key'
+  )
+end
+
 unbound_config 'unbound' do
-  server({
-           verbosity: 1,
-           interface: '127.0.0.1',
-         })
+  server server_config
   notifies :restart, 'unbound_service[unbound]', :delayed
 end
 
