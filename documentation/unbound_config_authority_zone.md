@@ -8,7 +8,8 @@
 
 ## Provides
 
-- :unbound_config_auth_zone
+- `:unbound_config_authority_zone`
+- `:unbound_config_auth_zone`
 
 ## Actions
 

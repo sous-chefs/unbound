@@ -18,11 +18,10 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Platform
 
-A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported.
+A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported. See [LIMITATIONS.md](LIMITATIONS.md) for package and platform support notes.
 
 - Ubuntu/Debian
-- Red Hat/CentOS/Fedora (requires EPEL)
-- FreeBSD
+- Red Hat-compatible Linux and Fedora
 
 ### Chef
 
@@ -46,11 +45,27 @@ A platform with unbound available as a native package. The following platforms h
 - [unbound_package](documentation/unbound_package.md)
 - [unbound_service](documentation/unbound_service.md)
 
-## Recipes
+## Migration
 
-### default
+This cookbook no longer ships public recipes. Use the custom resources directly in wrapper cookbooks. See [migration.md](migration.md) for the breaking recipe-to-resource migration guide.
 
-Installs unbound using defaults.
+### Basic Usage
+
+```ruby
+unbound_package 'unbound'
+
+unbound_config 'unbound' do
+  server(
+    verbosity: 1,
+    interface: ['127.0.0.1']
+  )
+  notifies :restart, 'unbound_service[unbound]', :delayed
+end
+
+unbound_service 'unbound' do
+  action [:enable, :start]
+end
+```
 
 ## Contributors
 

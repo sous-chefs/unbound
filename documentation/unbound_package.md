@@ -4,7 +4,8 @@
 
 ## Provides
 
-- :unbound_install
+- `:unbound_package`
+- `:unbound_install`
 
 ## Actions
 

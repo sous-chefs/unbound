@@ -15,7 +15,11 @@
 # limitations under the License.
 #
 
+# frozen_string_literal: true
+
 unified_mode true
+
+provides :unbound_config_cachedb
 
 use 'partials/_config_file'
 

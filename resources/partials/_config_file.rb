@@ -15,6 +15,8 @@
 # limitations under the License.
 #
 
+# frozen_string_literal: true
+
 unified_mode true
 
 include Unbound::Cookbook::Helpers
@@ -95,6 +97,7 @@ action_class do
     end
 
     config.merge!(new_resource.extra_options.dup) unless new_resource.extra_options.empty?
+    config = normalize_config_keys(config)
 
     if new_resource.sort
       deepsort?
@@ -115,6 +118,19 @@ action_class do
       variables(content: config)
 
       action new_resource.action
+    end
+  end
+
+  def normalize_config_keys(config)
+    case config
+    when Hash
+      config.each_with_object({}) do |(key, value), normalized|
+        normalized[key.to_s] = normalize_config_keys(value)
+      end
+    when Array
+      config.map { |value| normalize_config_keys(value) }
+    else
+      config
     end
   end
 end

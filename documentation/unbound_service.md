@@ -2,6 +2,10 @@
 
 [Back to resource list](../README.md#resources)
 
+## Provides
+
+- `:unbound_service`
+
 ## Actions
 
 - `:start`

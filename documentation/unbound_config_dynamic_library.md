@@ -6,6 +6,10 @@
 
 - [partials/_config_file](partials/unbound__config_file.md)
 
+## Provides
+
+- `:unbound_config_dynamic_library`
+
 ## Actions
 
 - None
