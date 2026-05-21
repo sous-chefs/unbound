@@ -2,6 +2,22 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## [4.0.0](https://github.com/sous-chefs/unbound/compare/v3.0.6...v4.0.0) (2026-05-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* modernize unbound resources and CI ([#98](https://github.com/sous-chefs/unbound/issues/98))
+
+### Features
+
+* modernize unbound resources and CI ([#98](https://github.com/sous-chefs/unbound/issues/98)) ([4a9008f](https://github.com/sous-chefs/unbound/commit/4a9008f3ba0b8caa2dac55861f841ba742f46fef))
+
+
+### Bug Fixes
+
+* **ci:** Update workflows to use release pipeline ([#94](https://github.com/sous-chefs/unbound/issues/94)) ([ed73baf](https://github.com/sous-chefs/unbound/commit/ed73bafa080466835683a3a8a3f57998f048d655))
+
 ## [3.0.6](https://github.com/sous-chefs/unbound/compare/3.0.5...v3.0.6) (2025-10-16)
 
 
