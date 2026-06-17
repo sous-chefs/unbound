@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 name 'unbound'
-default_source :supermarket
 
 run_list 'test::default'
 
