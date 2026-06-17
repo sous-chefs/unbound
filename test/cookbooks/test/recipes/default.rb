@@ -5,6 +5,7 @@ unbound_package 'unbound'
 unbound_config 'unbound' do
   server({
            verbosity: 1,
+           chroot: '',
            interface: [
              '127.0.0.1',
              '127.0.0.1@853',
