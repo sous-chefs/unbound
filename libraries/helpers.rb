@@ -71,7 +71,9 @@ module Unbound
       end
 
       def perform_config_action(config)
-        if %i(create create_if_missing).include?(new_resource.action)
+        resource_action = config_resource_action
+
+        if %i(create create_if_missing).include?(resource_action)
           directory new_resource.config_dir do
             owner new_resource.owner
             group new_resource.group
@@ -82,6 +84,7 @@ module Unbound
         end
 
         config.merge!(new_resource.extra_options.dup) unless new_resource.extra_options.empty?
+        config = normalize_config_keys(config)
 
         if new_resource.sort
           deepsort?
@@ -97,7 +100,24 @@ module Unbound
           sensitive new_resource.sensitive
           helpers(Unbound::Cookbook::TemplateHelpers)
           variables(content: config)
-          action new_resource.action
+          action resource_action
+        end
+      end
+
+      def config_resource_action
+        Array(new_resource.action).first
+      end
+
+      def normalize_config_keys(config)
+        case config
+        when Hash
+          config.each_with_object({}) do |(key, value), normalized|
+            normalized[key.to_s] = normalize_config_keys(value)
+          end
+        when Array
+          config.map { |value| normalize_config_keys(value) }
+        else
+          config
         end
       end
     end

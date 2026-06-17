@@ -51,12 +51,31 @@ end
 action_class do
   include Unbound::Cookbook::Helpers
 
+  def include_directories
+    new_resource.include
+                .select { |include_path| include_path.end_with?('*.conf') }
+                .map { |include_path| ::File.dirname(include_path) }
+                .uniq
+  end
+
+  def create_include_directories
+    include_directories.each do |include_dir|
+      directory include_dir do
+        owner new_resource.owner
+        group new_resource.group
+        mode new_resource.directory_mode
+        recursive true
+      end
+    end
+  end
+
   def do_template_action
     config = {
       'include' => new_resource.include.dup,
       'server' => new_resource.server.dup,
     }.compact
 
+    create_include_directories unless config_resource_action.eql?(:delete)
     perform_config_action(config)
   end
 end
