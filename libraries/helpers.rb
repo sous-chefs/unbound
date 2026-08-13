@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Library:: helpers
@@ -18,6 +19,20 @@
 module Unbound
   module Cookbook
     module Helpers
+      def deepsort?
+        return if defined?(DeepSort)
+
+        begin
+          Gem::Specification.find_by_name('deepsort')
+        rescue Gem::MissingSpecError
+          declare_resource(:chef_gem, 'deepsort')
+        end
+
+        require 'deepsort'
+
+        true
+      end
+
       def default_config_dir
         return '/etc/unbound' if %i(unbound_config unbound_configure unbound_config_server).include?(declared_type)
 
@@ -35,7 +50,7 @@ module Unbound
 
       def default_includes_dir
         case node['platform_family']
-        when 'rhel', 'fedora'
+        when 'amazon', 'rhel', 'fedora'
           %w(/etc/unbound/conf.d/*.conf /etc/unbound/local.d/*.conf)
         when 'debian'
           %w(/etc/unbound/unbound.conf.d/*.conf)
@@ -52,6 +67,57 @@ module Unbound
           'no'
         when 'yes', 'YES', 'no', 'NO'
           value.downcase
+        end
+      end
+
+      def perform_config_action(config)
+        resource_action = config_resource_action
+
+        if %i(create create_if_missing).include?(resource_action)
+          directory new_resource.config_dir do
+            owner new_resource.owner
+            group new_resource.group
+            mode new_resource.directory_mode
+            recursive true
+            action :create
+          end
+        end
+
+        config.merge!(new_resource.extra_options.dup) unless new_resource.extra_options.empty?
+        config = normalize_config_keys(config)
+
+        if new_resource.sort
+          deepsort?
+          config.deep_sort!
+        end
+
+        template new_resource.config_file do
+          cookbook new_resource.cookbook
+          source new_resource.template
+          owner new_resource.owner
+          group new_resource.group
+          mode new_resource.mode
+          sensitive new_resource.sensitive
+          helpers(Unbound::Cookbook::TemplateHelpers)
+          variables(content: config)
+          action resource_action
+        end
+      end
+
+      def config_resource_action
+        Array(new_resource.action).first
+      end
+
+      def normalize_config_keys(config)
+        case config
+        when Hash
+          config.each_with_object({}) do |(key, value), normalized|
+            normalized[key.to_s] = normalize_config_keys(value)
+          end
+        when Array
+          config.map { |value| normalize_config_keys(value) }
+        else
+          config
         end
       end
     end

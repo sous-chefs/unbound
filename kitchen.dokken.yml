@@ -1,10 +1,16 @@
+---
 driver:
   name: dokken
   privileged: true
   chef_version: <%= ENV['CHEF_VERSION'] || 'current' %>
 
 transport: { name: dokken }
-provisioner: { name: dokken }
+provisioner:
+  name: dokken
+  chef_license: accept
+  deprecations_as_errors: true
+  enforce_idempotency: <%= ENV['ENFORCE_IDEMPOTENCY'] || true %>
+  multiple_converge: <%= ENV['MULTIPLE_CONVERGE'] || 2 %>
 
 platforms:
   - name: almalinux-8
@@ -17,20 +23,20 @@ platforms:
       image: dokken/almalinux-9
       pid_one_command: /usr/lib/systemd/systemd
 
+  - name: amazonlinux-2023
+    driver:
+      image: dokken/amazonlinux-2023
+      pid_one_command: /usr/lib/systemd/systemd
+
   - name: centos-stream-9
     driver:
       image: dokken/centos-stream-9
       pid_one_command: /usr/lib/systemd/systemd
 
-  - name: debian-12
-    driver:
-      image: dokken/debian-12
-      pid_one_command: /bin/systemd
-
   - name: debian-13
     driver:
       image: dokken/debian-13
-      pid_one_command: /usr/lib/systemd/systemd
+      pid_one_command: /lib/systemd/systemd
 
   - name: fedora-latest
     driver:
