@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: config_stub_zone
@@ -15,13 +16,12 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
+provides :unbound_config_stub_zone
 unified_mode true
 
-provides :unbound_config_stub_zone
+include Unbound::Cookbook::Helpers
 
-use 'partials/_config_file'
+use '_partial/_config_file'
 
 property :config_file, String,
           default: lazy { "#{config_dir}/stub-zone-#{name}.conf" },
@@ -66,6 +66,8 @@ load_current_value do |new_resource|
 end
 
 action_class do
+  include Unbound::Cookbook::Helpers
+
   def do_template_action
     zone_config = {
       'name' => new_resource.zone_name,
@@ -86,3 +88,5 @@ action_class do
     perform_config_action(config)
   end
 end
+
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }

@@ -23,10 +23,10 @@ jobs:
         os:
           - "almalinux-8"
           - "almalinux-9"
-          - "fedora-latest"
+          - "amazonlinux-2023"
           - "centos-stream-9"
-          - "debian-12"
           - "debian-13"
+          - "fedora-latest"
           - "oraclelinux-8"
           - "oraclelinux-9"
           - "rockylinux-8"

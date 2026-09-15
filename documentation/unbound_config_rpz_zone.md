@@ -4,7 +4,7 @@
 
 ## Uses
 
-- [partials/_config_file](partials/unbound__config_file.md)
+- [_partial/_config_file](partials/unbound__config_file.md)
 
 ## Provides
 

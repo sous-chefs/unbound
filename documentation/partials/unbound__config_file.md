@@ -4,9 +4,7 @@
 
 ## Actions
 
-- `:create`
-- `:create_if_missing`
-- `:delete`
+- None. This file documents shared properties from `resources/_partial/_config_file.rb`.
 
 ## Properties
 
@@ -24,7 +22,3 @@
 | `sort`                |       | true, false |         |                                                                         |                |
 | `template_properties` |       | Hash        |         |                                                                         |                |
 | `extra_options`       |       | Hash        |         |                                                                         |                |
-
-## Libraries
-
-- `Unbound::Cookbook::Helpers`
