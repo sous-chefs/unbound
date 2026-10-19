@@ -6,7 +6,7 @@
 [![OpenCollective](https://opencollective.com/sous-chefs/sponsors/badge.svg)](#sponsors)
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Installs and manages the unbound DNS server.
+Installs and manages the unbound DNS server with custom resources.
 
 - [http://unbound.net](http://unbound.net)
 
@@ -18,14 +18,19 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Platform
 
-A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported. See [LIMITATIONS.md](LIMITATIONS.md) for package and platform support notes.
+A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported.
 
 - Ubuntu/Debian
-- Red Hat-compatible Linux and Fedora
+- Red Hat/CentOS/Fedora (requires EPEL)
+- FreeBSD
 
 ### Chef
 
 - Chef 16
+
+## Migration
+
+This cookbook no longer ships recipes. See [migration.md](migration.md) for the breaking change from `include_recipe 'unbound::default'` to resource-only usage.
 
 ## Resources
 
@@ -45,11 +50,7 @@ A platform with unbound available as a native package. The following platforms h
 - [unbound_package](documentation/unbound_package.md)
 - [unbound_service](documentation/unbound_service.md)
 
-## Migration
-
-This cookbook no longer ships public recipes. Use the custom resources directly in wrapper cookbooks. See [migration.md](migration.md) for the breaking recipe-to-resource migration guide.
-
-### Basic Usage
+## Usage
 
 ```ruby
 unbound_package 'unbound'
@@ -57,13 +58,26 @@ unbound_package 'unbound'
 unbound_config 'unbound' do
   server(
     verbosity: 1,
-    interface: ['127.0.0.1']
+    interface: [
+      '127.0.0.1',
+      '127.0.0.1@853',
+    ]
   )
   notifies :restart, 'unbound_service[unbound]', :delayed
 end
 
+unbound_config_forward_zone 'test.zone' do
+  forward_addr %w(1.1.1.1 8.8.8.8)
+  notifies :restart, 'unbound_service[unbound]', :delayed
+end
+
 unbound_service 'unbound' do
-  action [:enable, :start]
+  action :enable
+end
+
+unbound_service 'unbound start' do
+  service_name 'unbound'
+  action :start
 end
 ```
 
