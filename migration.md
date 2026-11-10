@@ -1,16 +1,21 @@
-# Migration
+# Migrating to Custom Resources
 
-## Migrating from Recipes to Resources
+This release removes the legacy recipe API. The cookbook now exposes only custom resources.
 
-This release removes the legacy `unbound::default` recipe. Wrapper cookbooks must declare the custom resources they need directly.
+## What Changed
 
-Before:
+* `recipes/default.rb` was removed.
+* Node attributes are not used for configuration.
+* `Berksfile` was replaced by `Policyfile.rb`.
+* Test cookbook recipes now show the supported resource-only entrypoint.
+
+## Before
 
 ```ruby
 include_recipe 'unbound::default'
 ```
 
-After:
+## After
 
 ```ruby
 unbound_package 'unbound'
@@ -18,18 +23,31 @@ unbound_package 'unbound'
 unbound_config 'unbound' do
   server(
     verbosity: 1,
-    interface: ['127.0.0.1']
+    interface: [
+      '127.0.0.1',
+      '127.0.0.1@853',
+    ]
   )
   notifies :restart, 'unbound_service[unbound]', :delayed
 end
 
+unbound_config_forward_zone 'test.zone' do
+  forward_addr %w(1.1.1.1 8.8.8.8)
+  notifies :restart, 'unbound_service[unbound]', :delayed
+end
+
 unbound_service 'unbound' do
-  action [:enable, :start]
+  action :enable
+end
+
+unbound_service 'unbound start' do
+  service_name 'unbound'
+  action :start
 end
 ```
 
-The old default recipe only installed the package and warned that configuration was no longer handled there. Use `unbound_package` for installation, `unbound_config` and related `unbound_config_*` resources for configuration files, and `unbound_service` for service management.
+## Resource Mapping
 
-## Test Cookbook Example
+Use `unbound_package` to install or remove packages, `unbound_config` for the main `unbound.conf`, the specific `unbound_config_*` resources for configuration fragments, and `unbound_service` for packaged service management.
 
-See `test/cookbooks/test/recipes/default.rb` for a complete package, configuration, and service example used by the default Kitchen suite.
+See `test/cookbooks/test/recipes/default.rb` for the maintained smoke-test example.

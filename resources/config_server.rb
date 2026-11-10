@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: config_server
@@ -15,15 +16,14 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
-unified_mode true
-
 provides :unbound_config_server
 provides :unbound_configure
 provides :unbound_config
+unified_mode true
 
-use 'partials/_config_file'
+include Unbound::Cookbook::Helpers
+
+use '_partial/_config_file'
 
 property :config_file, String,
           default: lazy { "#{config_dir}/unbound.conf" },
@@ -49,6 +49,8 @@ load_current_value do |new_resource|
 end
 
 action_class do
+  include Unbound::Cookbook::Helpers
+
   def include_directories
     new_resource.include
                 .select { |include_path| include_path.end_with?('*.conf') }
@@ -73,7 +75,9 @@ action_class do
       'server' => new_resource.server.dup,
     }.compact
 
-    create_include_directories unless new_resource.action.eql?(:delete)
+    create_include_directories unless config_resource_action.eql?(:delete)
     perform_config_action(config)
   end
 end
+
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: package
@@ -15,12 +16,9 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
-unified_mode true
-
 provides :unbound_package
 provides :unbound_install
+unified_mode true
 
 property :packages, [String, Array],
           coerce: proc { |p| p.is_a?(Array) ? p : [ p ] },
