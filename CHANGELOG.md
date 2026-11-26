@@ -2,6 +2,17 @@
 
 This file is used to list changes made in each version of the unbound cookbook.
 
+## [5.0.0](https://github.com/sous-chefs/unbound/compare/v4.0.0...v5.0.0) (2026-11-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate unbound to custom resources ([#105](https://github.com/sous-chefs/unbound/issues/105))
+
+### Features
+
+* migrate unbound to custom resources ([#105](https://github.com/sous-chefs/unbound/issues/105)) ([6ec088a](https://github.com/sous-chefs/unbound/commit/6ec088af67818535e2295ab00f5e463c4fd8baca))
+
 ## [4.0.0](https://github.com/sous-chefs/unbound/compare/v3.0.6...v4.0.0) (2026-05-20)
 
 
