@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: service
@@ -15,11 +16,8 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
-unified_mode true
-
 provides :unbound_service
+unified_mode true
 
 property :service_name, String,
           default: 'unbound',

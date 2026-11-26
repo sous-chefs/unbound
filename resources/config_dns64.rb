@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: config_dns64
@@ -15,13 +16,12 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
+provides :unbound_config_dns64
 unified_mode true
 
-provides :unbound_config_dns64
+include Unbound::Cookbook::Helpers
 
-use 'partials/_config_file'
+use '_partial/_config_file'
 
 property :config_file, String,
           default: lazy { "#{config_dir}/dns64.conf" },
@@ -46,7 +46,9 @@ load_current_value do |new_resource|
 end
 
 action_class do
-  def do_template_action
+  include Unbound::Cookbook::Helpers
+
+  def do_template_action(action_type)
     dns64_config = {
       'dns64-prefix' => new_resource.dns64_prefix,
       'dns64-synthall' => new_resource.dns64_synthall,
@@ -57,6 +59,8 @@ action_class do
       'server' => dns64_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
+
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 #
 # Cookbook:: unbound
 # Resource:: config_rpz_zone
@@ -15,13 +16,12 @@
 # limitations under the License.
 #
 
-# frozen_string_literal: true
-
+provides :unbound_config_rpz_zone
 unified_mode true
 
-provides :unbound_config_rpz_zone
+include Unbound::Cookbook::Helpers
 
-use 'partials/_config_file'
+use '_partial/_config_file'
 
 property :config_file, String,
           default: lazy { "#{config_dir}/rpz-zone-#{name}.conf" },
@@ -76,7 +76,9 @@ load_current_value do |new_resource|
 end
 
 action_class do
-  def do_template_action
+  include Unbound::Cookbook::Helpers
+
+  def do_template_action(action_type)
     zone_config = {
       'name' => new_resource.zone_name,
       'primary' => new_resource.primary.dup,
@@ -97,6 +99,8 @@ action_class do
       'rpz' => zone_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
+
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }
