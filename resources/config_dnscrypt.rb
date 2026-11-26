@@ -63,7 +63,7 @@ end
 action_class do
   include Unbound::Cookbook::Helpers
 
-  def do_template_action
+  def do_template_action(action_type)
     dnscrypt_config = {
       'dnscrypt-enable' => new_resource.dnscrypt_enable,
       'dnscrypt-port' => new_resource.dnscrypt_port,
@@ -81,8 +81,8 @@ action_class do
       'dnscrypt' => dnscrypt_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
 
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }

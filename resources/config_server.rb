@@ -69,15 +69,15 @@ action_class do
     end
   end
 
-  def do_template_action
+  def do_template_action(action_type)
     config = {
       'include' => new_resource.include.dup,
       'server' => new_resource.server.dup,
     }.compact
 
-    create_include_directories unless config_resource_action.eql?(:delete)
-    perform_config_action(config)
+    create_include_directories unless action_type == :delete
+    perform_config_action(config, action_type)
   end
 end
 
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }

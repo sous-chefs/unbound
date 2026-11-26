@@ -90,7 +90,7 @@ end
 action_class do
   include Unbound::Cookbook::Helpers
 
-  def do_template_action
+  def do_template_action(action_type)
     zone_config = {
       'dnstap-enable' => new_resource.dnstap_enable,
       'dnstap-bidirectional' => new_resource.dnstap_bidirectional,
@@ -117,8 +117,8 @@ action_class do
       'dnstap' => zone_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
 
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }

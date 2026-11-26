@@ -18,11 +18,10 @@ This cookbook is maintained by the Sous Chefs. The Sous Chefs are a community of
 
 ### Platform
 
-A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported.
+A platform with unbound available as a native package. The following platforms have unbound packaged, but note that the filesystem locations are not consistent and at this time only Linux + FHS is supported. See [LIMITATIONS.md](LIMITATIONS.md) for package and platform support notes.
 
 - Ubuntu/Debian
-- Red Hat/CentOS/Fedora (requires EPEL)
-- FreeBSD
+- Red Hat-compatible Linux and Fedora
 
 ### Chef
 

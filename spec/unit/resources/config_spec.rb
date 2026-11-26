@@ -83,6 +83,26 @@ describe 'unbound_config_authority_zone' do
   it { is_expected.to create_template('/etc/unbound/unbound.conf.d/authority-zone-example.org.conf') }
 end
 
+describe 'unbound_config_server actions' do
+  step_into :unbound_config_server
+  platform 'ubuntu', '24.04'
+
+  recipe do
+    unbound_config_server 'notified' do
+      config_file '/etc/unbound/notified.conf'
+      action :nothing
+    end.run_action(:create)
+
+    unbound_config_server 'removed' do
+      config_file '/etc/unbound/removed.conf'
+      action [:create, :delete]
+    end
+  end
+
+  it { is_expected.to create_template('/etc/unbound/notified.conf') }
+  it { is_expected.to delete_template('/etc/unbound/removed.conf') }
+end
+
 describe 'unbound_config_cachedb' do
   step_into :unbound_config_cachedb
   platform 'ubuntu', '24.04'

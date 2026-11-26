@@ -70,9 +70,7 @@ module Unbound
         end
       end
 
-      def perform_config_action(config)
-        resource_action = config_resource_action
-
+      def perform_config_action(config, resource_action)
         if %i(create create_if_missing).include?(resource_action)
           directory new_resource.config_dir do
             owner new_resource.owner
@@ -102,10 +100,6 @@ module Unbound
           variables(content: config)
           action resource_action
         end
-      end
-
-      def config_resource_action
-        Array(new_resource.action).first
       end
 
       def normalize_config_keys(config)

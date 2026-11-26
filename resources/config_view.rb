@@ -56,7 +56,7 @@ end
 action_class do
   include Unbound::Cookbook::Helpers
 
-  def do_template_action
+  def do_template_action(action_type)
     zone_config = {
       'name' => new_resource.zone_name,
       'local-zone' => new_resource.local_zone.dup,
@@ -69,8 +69,8 @@ action_class do
       'view' => zone_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
 
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }

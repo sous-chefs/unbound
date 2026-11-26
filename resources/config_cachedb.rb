@@ -54,7 +54,7 @@ end
 action_class do
   include Unbound::Cookbook::Helpers
 
-  def do_template_action
+  def do_template_action(action_type)
     cachedb_config = {
       'backend' => new_resource.backend,
       'secret-seed' => new_resource.secret_seed,
@@ -68,8 +68,8 @@ action_class do
       'cachedb' => cachedb_config,
     }
 
-    perform_config_action(config)
+    perform_config_action(config, action_type)
   end
 end
 
-%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action } }
+%i(create create_if_missing delete).each { |action_type| action(action_type) { do_template_action(action_type) } }
